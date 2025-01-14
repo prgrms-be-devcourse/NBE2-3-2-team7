@@ -17,13 +17,13 @@ import java.time.LocalDateTime;
 public class RentalLand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "seq", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "landlord_id")
+    @Column(name = "landlord_id", nullable = false)
     private Long landlordId;
 
-    @Column(name = "price", precision = 10)
+    @Column(name = "price", precision = 10, nullable = false)
     private BigDecimal price;
 
     @Size(min = 5, max = 5)
@@ -35,22 +35,22 @@ public class RentalLand {
     private String address;
 
     @Size(max = 255)
-    @Column(name = "addr_detail")
+    @Column(name = "addr_detail", nullable = false)
     private String addrDetail;
 
     @Size(max = 255)
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Lob
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
     @Size(max = 255)
     @Column(name = "infra")
     private String infra;
 
-    @Column(name = "area")
+    @Column(name = "area", nullable = false)
     private Integer area;
 
     @Enumerated(EnumType.STRING)

@@ -20,7 +20,7 @@ public class PopupStore {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "customer_id")
+    @Column(name = "customer_id", nullable = false)
     private Long customerId;
 
     @Column(name = "type", nullable = false)
@@ -35,15 +35,15 @@ public class PopupStore {
     private String address;
 
     @Size(max = 255)
-    @Column(name = "addr_detail")
+    @Column(name = "addr_detail", nullable = false)
     private String addrDetail;
 
     @Size(max = 255)
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Lob
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
     @Column(name = "start_date", nullable = false)

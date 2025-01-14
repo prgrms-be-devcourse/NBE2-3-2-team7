@@ -33,8 +33,8 @@ public class Receipts {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    @Column(name = "total_amount", precision = 10)
-    private BigDecimal totalAmount;
+    @Column(name = "amount", precision = 10)
+    private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "reservation_status", nullable = false)
