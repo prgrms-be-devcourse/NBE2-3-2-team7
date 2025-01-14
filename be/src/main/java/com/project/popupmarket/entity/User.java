@@ -36,19 +36,22 @@ public class User implements UserDetails {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "social")
+    @Column(name = "social", nullable = false)
     @Enumerated(EnumType.STRING)
     private AuthProvider social;
 
-    @Column(name = "brand")
+    @Column(name = "brand", nullable = false)
     private String brand;
 
-    @Column(name = "tel")
+    @Column(name = "tel", nullable = false)
     private String tel;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name = "business_id")
+    private String businessId;
 
     @Column(nullable = false)
     private LocalDateTime registeredAt;
