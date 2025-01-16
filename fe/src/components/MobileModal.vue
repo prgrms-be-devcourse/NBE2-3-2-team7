@@ -1,5 +1,5 @@
 <script setup>
-import { defineEmits } from 'vue';
+import { RouterLink } from 'vue-router';
 
 const emit = defineEmits(['close']);
 </script>
@@ -32,11 +32,11 @@ const emit = defineEmits(['close']);
 							class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-200 transition-colors hover:text-[#3FB8AF]">회원</router-link>
 					</div>
 					<div class="py-6">
-						<a href="/login" id="mobile-login-button"
+						<router-link to="/signin" id="mobile-login-button"
 							class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-200 transition-colors hover:text-[#3FB8AF]">
-							Log in <span aria-hidden="true">&rarr;</span>
-						</a>
-						<button id="mobile-logout-button" onclick="handleLogout()" style="display: none"
+							Sign in <span aria-hidden="true">&rarr;</span>
+						</router-link>
+						<button id="mobile-logout-button" style="display: none"
 							class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-200 transition-colors hover:text-[#3FB8AF]">
 							Log out <span aria-hidden="true">&rarr;</span>
 						</button>
