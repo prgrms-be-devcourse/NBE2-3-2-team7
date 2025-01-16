@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "pppup_store")
+@Table(name = "popup_store")
 public class PopupStore {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
