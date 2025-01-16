@@ -16,10 +16,10 @@ public class StagingPayment {
     @Id
     @Column(name = "order_id", nullable = false)
     private String orderId;
-    @Column(name = "popup_user_seq", nullable = false)
-    private Long popupUserSeq;
-    @Column(name = "rental_place_seq", nullable = false)
-    private Long rentalPlaceSeq;
+    @Column(name = "customer_id", nullable = false)
+    private Long customerId;
+    @Column(name = "rental_land_id", nullable = false)
+    private Long rentalLandId;
     @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
     @Column(name = "end_date", nullable = false)
