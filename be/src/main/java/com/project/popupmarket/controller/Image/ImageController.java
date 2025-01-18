@@ -63,4 +63,32 @@ public class ImageController {
     }
 
 
+    @GetMapping("/images/single")
+    public ResponseEntity<String> getSingleImage(
+            @RequestParam("category") String category,
+            @RequestParam("userId") Long userId,
+            @RequestParam("categoryId") Long categoryId
+    ) {
+        try {
+            String imageUrl = s3FileService.getSingleImage(category, userId, categoryId);
+            return ResponseEntity.ok(imageUrl);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/images/multiple")
+    public ResponseEntity<List<String>> getMultipleImages(
+            @RequestParam("category") String category,
+            @RequestParam("userId") Long userId,
+            @RequestParam("categoryId") Long categoryId
+    ) {
+        List<String> imageUrls = s3FileService.getMultipleImages(category, userId, categoryId);
+        if (imageUrls.isEmpty()) {
+            return ResponseEntity.status(404).body(List.of("No multiple images found for userId: " + userId));
+        }
+        return ResponseEntity.ok(imageUrls);
+    }
+
+
 }

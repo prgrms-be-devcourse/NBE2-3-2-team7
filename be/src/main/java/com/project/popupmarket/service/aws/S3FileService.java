@@ -107,6 +107,40 @@ public class S3FileService {
                 .collect(Collectors.toList());
     }
 
+    public String getSingleImage(String category, Long userId, Long categoryId) {
+        String prefix = String.format("%s/%d_%d_thumbnail_", category, userId, categoryId);
+
+        ListObjectsV2Request request = ListObjectsV2Request.builder()
+                .bucket(bucket)
+                .prefix(prefix)
+                .build();
+
+        ListObjectsV2Response response = s3Client.listObjectsV2(request);
+
+        return response.contents().stream()
+                .findFirst()
+                .map(S3Object::key)
+                .map(this::getImageUrl)
+                .orElseThrow(() -> new RuntimeException("No single image found for userId: " + userId));
+    }
+
+    public List<String> getMultipleImages(String category, Long userId, Long categoryId) {
+        String prefix = String.format("%s/%d_%d_images_", category, categoryId, userId);
+
+        ListObjectsV2Request request = ListObjectsV2Request.builder()
+                .bucket(bucket)
+                .prefix(prefix)
+                .build();
+
+        ListObjectsV2Response response = s3Client.listObjectsV2(request);
+
+        // URL 리스트 생성
+        return response.contents().stream()
+                .map(S3Object::key)
+                .map(this::getImageUrl)
+                .collect(Collectors.toList());
+    }
+
     private String getImageUrl(String fileName) {
         return String.format("https://%s.s3.%s.amazonaws.com/%s", bucket, region, fileName);
     }
