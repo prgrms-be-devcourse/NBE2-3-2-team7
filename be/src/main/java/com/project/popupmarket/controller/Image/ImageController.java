@@ -90,5 +90,20 @@ public class ImageController {
         return ResponseEntity.ok(imageUrls);
     }
 
+        @DeleteMapping("/delete")
+    public ResponseEntity<List<String>> deleteFiles(
+            @RequestParam("category") String category,
+            @RequestParam("userId") Long userId,
+            @RequestParam("categoryId") Long categoryId
+    ) {
+        List<String> deletedKeys = s3FileService.deleteFiles(category, userId, categoryId);
+
+        if (deletedKeys.isEmpty()) {
+            return ResponseEntity.status(404).body(List.of("No files found for category: " + category + " and userId: " + userId));
+        }
+
+        return ResponseEntity.ok(deletedKeys);
+    }
+
 
 }

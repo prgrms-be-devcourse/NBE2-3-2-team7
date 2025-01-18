@@ -141,6 +141,32 @@ public class S3FileService {
                 .collect(Collectors.toList());
     }
 
+    public List<String> deleteFiles(String category, Long userId, Long categoryId) {
+        String prefix = String.format("%s/%d_%d_", category, userId,categoryId);
+
+        ListObjectsV2Request listRequest = ListObjectsV2Request.builder()
+                .bucket(bucket)
+                .prefix(prefix)
+                .build();
+
+        ListObjectsV2Response listResponse = s3Client.listObjectsV2(listRequest);
+
+        List<String> keysToDelete = listResponse.contents().stream()
+                .map(S3Object::key)
+                .collect(Collectors.toList());
+
+        // S3에서 각 파일 삭제
+        keysToDelete.forEach(key -> {
+            DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(key)
+                    .build();
+            s3Client.deleteObject(deleteRequest);
+        });
+
+        return keysToDelete;
+    }
+
     private String getImageUrl(String fileName) {
         return String.format("https://%s.s3.%s.amazonaws.com/%s", bucket, region, fileName);
     }
