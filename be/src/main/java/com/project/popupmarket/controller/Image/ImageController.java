@@ -26,5 +26,11 @@ public class ImageController {
         }
     }
 
+    @GetMapping("/images")
+    public ResponseEntity<List<String>> getAllImageUrls() {
+        List<String> imageUrls = s3FileService.getAllImageUrls();
+        return ResponseEntity.ok(imageUrls);
+    }
+
 
 }

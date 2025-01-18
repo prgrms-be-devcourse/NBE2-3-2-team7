@@ -51,6 +51,21 @@ public class S3FileService {
         return getImageUrl(fileName);
     }
 
+    public List<String> getAllImageUrls() {
+        // S3 버킷의 모든 객체 목록 가져오기
+        ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
+                .bucket(bucket)
+                .build();
+
+        ListObjectsV2Response listObjectsResponse = s3Client.listObjectsV2(listObjectsRequest);
+
+        // 객체 키로부터 URL 생성
+        return listObjectsResponse.contents().stream()
+                .map(S3Object::key)
+                .map(this::getImageUrl)
+                .collect(Collectors.toList());
+    }
+
     private String getImageUrl(String fileName) {
         return String.format("https://%s.s3.%s.amazonaws.com/%s", bucket, region, fileName);
     }
