@@ -66,6 +66,47 @@ public class S3FileService {
                 .collect(Collectors.toList());
     }
 
+    public String uploadSingleImage(MultipartFile image, Long userId, Long categoryId, String category) throws IOException {
+        String key = String.format("%s/%d_%d_thumbnail_%s", category, userId, categoryId, image.getOriginalFilename());
+
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucket)
+                .key(key)
+                .contentType(image.getContentType())
+                .build();
+
+        s3Client.putObject(
+                putObjectRequest,
+                RequestBody.fromInputStream(image.getInputStream(), image.getSize())
+        );
+        return getImageUrl(key);
+    }
+
+    public List<String> uploadMultipleImages(List<MultipartFile> images, Long userId, Long categoryId, String category) throws IOException {
+        return images.stream()
+                .map(image -> {
+                    try {
+                        int imageIndex = images.indexOf(image) + 1;
+                        String key = String.format("%s/%d_%d_images_%d_%s", category, userId, categoryId, imageIndex, image.getOriginalFilename());
+
+                        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                                .bucket(bucket)
+                                .key(key)
+                                .contentType(image.getContentType())
+                                .build();
+
+                        s3Client.putObject(
+                                putObjectRequest,
+                                RequestBody.fromInputStream(image.getInputStream(), image.getSize())
+                        );
+                        return getImageUrl(key);
+                    } catch (IOException e) {
+                        throw new RuntimeException("Image upload failed: " + image.getOriginalFilename(), e);
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
     private String getImageUrl(String fileName) {
         return String.format("https://%s.s3.%s.amazonaws.com/%s", bucket, region, fileName);
     }

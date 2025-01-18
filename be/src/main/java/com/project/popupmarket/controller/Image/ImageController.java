@@ -26,6 +26,36 @@ public class ImageController {
         }
     }
 
+    @PostMapping("/single")
+    public ResponseEntity<String> uploadSingleImage(
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("category") String category,
+            @RequestParam("userId") Long userId,
+            @RequestParam("categoryId") Long categoryId
+    ) {
+        try {
+            String imageUrl = s3FileService.uploadSingleImage(image, userId, categoryId, category);
+            return ResponseEntity.ok(imageUrl);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Image upload failed: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/multiple")
+    public ResponseEntity<List<String>> uploadMultipleImages(
+            @RequestParam("images") List<MultipartFile> images,
+            @RequestParam("category") String category,
+            @RequestParam("userId") Long userId,
+            @RequestParam("categoryId") Long categoryId
+    ) {
+        try {
+            List<String> imageUrls = s3FileService.uploadMultipleImages(images, userId, categoryId, category);
+            return ResponseEntity.ok(imageUrls);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body(List.of("Image upload failed: " + e.getMessage()));
+        }
+    }
+
     @GetMapping("/images")
     public ResponseEntity<List<String>> getAllImageUrls() {
         List<String> imageUrls = s3FileService.getAllImageUrls();
