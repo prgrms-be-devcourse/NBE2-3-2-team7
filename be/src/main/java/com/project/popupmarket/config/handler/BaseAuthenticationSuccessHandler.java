@@ -25,7 +25,10 @@ public abstract class BaseAuthenticationSuccessHandler extends SimpleUrlAuthenti
     protected void saveJwtToken(Long userId, String newJwtToken) {
         JwtToken jwtToken = jwtTokenRepository.findByUserId(userId)
                 .map(entity -> entity.update(newJwtToken))
-                .orElse(new JwtToken(userId, newJwtToken));
+                .orElse(JwtToken.builder()
+                        .userId(userId)
+                        .jwtToken(newJwtToken)
+                        .build());
 
         jwtTokenRepository.save(jwtToken);
     }

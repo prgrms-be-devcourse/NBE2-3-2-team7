@@ -1,6 +1,6 @@
 package com.project.popupmarket.controller.mypage;
 
-import com.project.popupmarket.dto.user.UserTO;
+import com.project.popupmarket.dto.user.UserDto;
 import com.project.popupmarket.dto.user.UserUpdateRequest;
 import com.project.popupmarket.entity.User;
 import com.project.popupmarket.service.user.UserService;
@@ -22,11 +22,8 @@ public class MyPageController {
 
     private final UserService userService;
 
-    @Value("${app.default-profile-image}")
-    private String defaultProfileImage;
-
     // 공통으로 사용할 사용자 정보 조회 메서드
-    private UserTO getCurrentUser() {
+    private UserDto getCurrentUser() {
         ModelMapper modelMapper = new ModelMapper();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -37,7 +34,7 @@ public class MyPageController {
         if (user.isPresent()) {
 //            userTO.setProfileImage(user.get().getProfileImage() != null ?
 //                    user.get().getProfileImage() : defaultProfileImage);
-            return modelMapper.map(user.get(), UserTO.class);
+            return modelMapper.map(user.get(), UserDto.class);
         } else {
             throw new RuntimeException("User not found");
         }
@@ -45,7 +42,7 @@ public class MyPageController {
 
     @GetMapping("/api/user")
     @ResponseBody
-    public ResponseEntity<UserTO> getUserInfo() {
+    public ResponseEntity<UserDto> getUserInfo() {
         try {
             return ResponseEntity.ok(getCurrentUser());
         } catch (Exception e) {
@@ -58,7 +55,7 @@ public class MyPageController {
             @RequestPart(value = "userUpdateRequest") UserUpdateRequest request,
             @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) {
         try {
-            UserTO currentUser = getCurrentUser(); // 앞서 만든 getCurrentUser() 메서드 활용
+            UserDto currentUser = getCurrentUser(); // 앞서 만든 getCurrentUser() 메서드 활용
             request.setProfileImage(profileImage);
             userService.updateUser(currentUser.getId(), request);
             return ResponseEntity.ok().build();
@@ -70,7 +67,7 @@ public class MyPageController {
     @DeleteMapping("/api/deleteUser")
     public ResponseEntity<String> deleteUser() {
         try {
-            UserTO currentUser = getCurrentUser();
+            UserDto currentUser = getCurrentUser();
             userService.deleteUser(currentUser.getId());
             return ResponseEntity.ok().build();
         } catch (Exception e) {

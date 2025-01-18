@@ -1,6 +1,5 @@
 package com.project.popupmarket.config;
 
-import com.project.popupmarket.config.handler.FormLoginSuccessHandler;
 import com.project.popupmarket.config.handler.OAuth2SuccessHandler;
 import com.project.popupmarket.config.jwt.TokenAuthenticationFilter;
 import com.project.popupmarket.config.jwt.TokenProvider;
@@ -17,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -49,8 +49,8 @@ public class WebOAuthSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .httpBasic(httpBasic -> httpBasic.disable())
+                .csrf(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
@@ -82,14 +82,14 @@ public class WebOAuthSecurityConfig {
         );
 
         // 폼 로그인 설정
-        http.formLogin(formLogin -> formLogin
-                .loginPage("/login")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .loginProcessingUrl("/login")
-                .successHandler(formLoginSuccessHandler())
-                .permitAll()
-        );
+//        http.formLogin(formLogin -> formLogin
+//                .loginPage("/login")
+//                .usernameParameter("email")
+//                .passwordParameter("password")
+//                .loginProcessingUrl("/login")
+//                .successHandler(formLoginSuccessHandler())
+//                .permitAll()
+//        );
 
         // OAuth2 로그인 설정
         http.oauth2Login(oauth2 -> oauth2
@@ -123,10 +123,10 @@ public class WebOAuthSecurityConfig {
     }
 
     // 폼 로그인 성공 핸들러 추가
-    @Bean
-    public FormLoginSuccessHandler formLoginSuccessHandler() {
-        return new FormLoginSuccessHandler(tokenProvider, jwtTokenRepository);
-    }
+//    @Bean
+//    public FormLoginSuccessHandler formLoginSuccessHandler() {
+//        return new FormLoginSuccessHandler(tokenProvider, jwtTokenRepository);
+//    }
 
     // TokenAuthenticationFilter 빈 등록
     @Bean
