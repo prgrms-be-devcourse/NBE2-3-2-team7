@@ -1,5 +1,6 @@
 package com.project.popupmarket.service.user;
 
+import com.project.popupmarket.dto.auth.LoginRequest;
 import com.project.popupmarket.dto.user.UserRegisterDto;
 import com.project.popupmarket.dto.user.UserUpdateRequest;
 import com.project.popupmarket.entity.User;
@@ -8,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +29,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     @Value("${app.upload-path}")
     private String uploadPath;
 
@@ -57,7 +59,6 @@ public class UserService {
 
     @Transactional
     public void updateUser(Long userId, UserUpdateRequest request) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
@@ -88,6 +89,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    // 프로필 이미지 유효성 검사
     private void validateProfileImage(MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
         if (originalFilename == null || originalFilename.isEmpty()) {
@@ -147,5 +149,20 @@ public class UserService {
 
         // 사용자 삭제
         userRepository.delete(user);
+    }
+
+    // 사용자 인증
+    public User authenticate(LoginRequest request) {
+        // 1. 이메일로 사용자 조회
+        User user = userRepository.findByEmail(request.getEmail())
+                                  .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다."));
+
+        // 2. 비밀번호 검증
+        if (!encoder.matches(request.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        }
+
+        // 3. 인증된 사용자 정보 반환 (SecurityContextHolder 설정 제거)
+        return user;
     }
 }

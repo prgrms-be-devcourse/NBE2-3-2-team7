@@ -1,10 +1,12 @@
 package com.project.popupmarket.controller.auth;
 
+import com.project.popupmarket.dto.auth.CredentialAuthErrorResponse;
 import com.project.popupmarket.dto.auth.LoginRequest;
 import com.project.popupmarket.dto.token.CreateAccessTokenResponse;
 import com.project.popupmarket.entity.User;
-import com.project.popupmarket.service.auth.AuthService;
+import com.project.popupmarket.exception.ErrorCode;
 import com.project.popupmarket.service.token.TokenService;
+import com.project.popupmarket.service.user.UserService;
 import com.project.popupmarket.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,22 +19,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
 
-import static com.project.popupmarket.config.handler.BaseAuthenticationSuccessHandler.JWT_TOKEN_COOKIE_NAME;
+import static com.project.popupmarket.config.jwt.AuthConstants.JWT_TOKEN_COOKIE_NAME;
+
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
-public class AuthController {
-    private final AuthService authService;
+public class CredentialAuthController {
+    private final UserService userService;
     private final TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<CreateAccessTokenResponse> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request,HttpServletRequest ignoredRequest, HttpServletResponse response) {
         // 1. 사용자 인증
-        User authenticatedUser = authService.authenticate(request);
+        try {
+            User authenticatedUser = userService.authenticate(request);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new CredentialAuthErrorResponse(ErrorCode.CREDENTIAL_AUTH_ERROR.getStatus(), ErrorCode.CREDENTIAL_AUTH_ERROR.getMessage()));
+        }
+        User authenticatedUser = userService.authenticate(request);
 
         // 2. 토큰 생성
-        String accessToken = tokenService.createAccessTokens(authenticatedUser);
+        String accessToken = tokenService.createAccessToken(authenticatedUser);
         String refreshToken = tokenService.createRefreshToken(authenticatedUser);
 
         // 3. 리프레시 토큰을 쿠키에 저장

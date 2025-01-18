@@ -1,6 +1,5 @@
 package com.project.popupmarket.service.token;
 
-import com.project.popupmarket.config.jwt.JwtProperties;
 import com.project.popupmarket.config.jwt.TokenProvider;
 import com.project.popupmarket.entity.JwtToken;
 import com.project.popupmarket.entity.User;
@@ -19,7 +18,7 @@ public class TokenService {
     private final UserService userService;
 
     // 액세스 토큰 생성
-    public String createAccessTokens(User user) {
+    public String createAccessToken(User user) {
         // Access Token 생성 (2시간)
         return tokenProvider.generateToken(user, Duration.ofHours(2));
     }

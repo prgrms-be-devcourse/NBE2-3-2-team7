@@ -6,13 +6,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.util.SerializationUtils;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Optional;
 
 public class CookieUtil {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
     // 요청값(이름, 입력, 만료 기간을(초)) 입력 받아 쿠키 생성
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
@@ -65,12 +62,13 @@ public class CookieUtil {
 
     // 쿠키를 역지렬화해 객체로 변환
     public static <T> T deserialize(Cookie cookie, Class<T> cls) {
-        try {
-            byte[] decodedBytes = Base64.getUrlDecoder().decode(cookie.getValue());
-            String decodedString = new String(decodedBytes, StandardCharsets.UTF_8);
-            return objectMapper.readValue(decodedString, cls);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Failed to deserialize cookie", e);
-        }
+        return cls.cast(
+                SerializationUtils.deserialize(
+                        Base64.getUrlDecoder().decode(cookie.getValue())
+                )
+        );
     }
+
+
+
 }
