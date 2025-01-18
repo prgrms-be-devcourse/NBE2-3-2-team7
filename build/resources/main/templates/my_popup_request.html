@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>POP-UP Market</title>
+	<!-- Tailwind CSS -->
+	<link rel="stylesheet" href="/css/output.css">
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<!-- Flatpickr JS -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<!-- noUiSlider CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+	<!-- noUiSlider JS -->
+	<script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+	<!-- Common JS -->
+	<script src="/scripts/common.js" defer></script>
+	<!-- My Popup Request JS -->
+	<script src="/scripts/my.popup.request.js"></script>
+	<style>
+		.noUi-horizontal .noUi-handle {
+			width: 24px;
+			height: 20px;
+			right: -12px;
+			top: -2px;
+		}
+	</style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+	<header th:replace="~{fragments/header.html :: header}"></header>
+	<main class="flex-grow flex flex-col items-center">
+		<nav class="bg-white sm:bg-[#3FB8AF] w-full flex justify-center">
+			<div class="sm:my-0 sm:max-w-7xl min-w-full space-x-0 space-y-0 sm:space-x-1 sm:pt-10 sm:px-4 justify-center items-center flex flex-col sm:flex-row sm:border-0 border-b overflow-hidden">
+				<a href="/mypage" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-gray-300 sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-white sm:border-gray-400 hover:bg-gray-300 sm:transform sm:translate-y-3 text-gray-700">회원 정보</a>
+				<a href="/mypage/rental" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-gray-300 sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-white sm:border-gray-400 hover:bg-gray-300 sm:transform sm:translate-y-3 text-gray-700">임대지 관리</a>
+				<a href="/mypage/popup" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-white bg-[#3FB8AF] sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-gray-400 sm:text-gray-700 text-white">팝업 관리</a>
+				<a href="/mypage/receipt" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-gray-300 sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-white sm:border-gray-400 hover:bg-gray-300 sm:transform sm:translate-y-3 text-gray-700">결제 내역</a>
+			</div>
+		</nav>
+		<section class="mt-4 w-full px-4">
+			<div class="max-w-3xl mx-auto">
+				<div class="flex justify-between pb-2 border-b border-gray-300">
+					<div>
+						<a href="/mypage/popup" class="font-bold p-2">&#10094;&#10094;</a>
+						<span id="popup-title" class="font-bold p-2">팝업스토어 제목</span>
+					</div>
+					<span class="font-bold p-2">입점 요청 목록</span>
+				</div>
+				<div class="p-4 space-y-4">
+					<a href="#" class="p-4 hover:bg-gray-200 transition-colors items-center space-y-4 sm:space-y-0 space-x-0 sm:space-x-4 bg-white flex sm:flex-row flex-col border border-gray-300 rounded-lg">
+						<img class="border border-gray-300 min-h-40 w-full sm:max-w-60 object-cover bg-gray-100" src="https://images.unsplash.com/photo-1656618724305-a4257e46e847?q=80&w=320&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+						<div class="flex flex-col space-y-4 w-full">
+							<span class="font-bold text-lg">임대지 이름</span>
+							<span class="font-bold text-sm">주소 (주소 + 상세주소)</span>
+							<span class="font-bold">100,000 원 / 일</span>
+							<span class="w-full text-right text-xs font-bold">클릭하시면 임대지의 상세 페이지로 이동합니다.</span>
+						</div>
+					</a>
+				</div>
+			</div>
+		</section>
+	</main>
+	<footer th:replace="~{fragments/footer.html :: footer}"></footer>
+</body>
+
+</html>

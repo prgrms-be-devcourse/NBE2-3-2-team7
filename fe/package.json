@@ -10,9 +10,12 @@
   },
   "dependencies": {
     "axios": "^1.7.9",
+    "flatpickr": "^4.6.13",
+    "nouislider": "^15.8.1",
+    "pinia": "^2.3.0",
+    "tailwind-scrollbar": "^3.1.0",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0",
-    "vuex": "^4.1.0"
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

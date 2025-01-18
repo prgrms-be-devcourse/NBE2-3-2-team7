@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>POP-UP Market</title>
+	<!-- Tailwind CSS -->
+	<link rel="stylesheet" href="/css/output.css">
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<!-- Flatpickr JS -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<!-- noUiSlider CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+	<!-- noUiSlider JS -->
+	<script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+	<!-- Common JS -->
+	<script src="/scripts/common.js" defer></script>
+	<!-- My Popup List JS -->
+	<script src="/scripts/my.popup.list.js"></script>
+	<style>
+		.noUi-horizontal .noUi-handle {
+			width: 24px;
+			height: 20px;
+			right: -12px;
+			top: -2px;
+		}
+	</style>
+</head>
+<body class="flex flex-col min-h-screen">
+	<header th:replace="~{fragments/header.html :: header}"></header>
+	<main class="flex-grow flex flex-col items-center">
+		<nav class="bg-white sm:bg-[#3FB8AF] w-full flex justify-center">
+			<div class="sm:my-0 sm:max-w-7xl min-w-full space-x-0 space-y-0 sm:space-x-1 sm:pt-10 sm:px-4 justify-center items-center flex flex-col sm:flex-row sm:border-0 border-b overflow-hidden">
+				<a href="/mypage" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-gray-300 sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-white sm:border-gray-400 hover:bg-gray-300 sm:transform sm:translate-y-3 text-gray-700">회원 정보</a>
+				<a href="/mypage/rental" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-gray-300 sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-white sm:border-gray-400 hover:bg-gray-300 sm:transform sm:translate-y-3 text-gray-700">임대지 관리</a>
+				<a href="/mypage/popup" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-white bg-[#3FB8AF] sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-gray-400 sm:text-gray-700 text-white">팝업 관리</a>
+				<a href="/mypage/receipt" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-gray-300 sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-white sm:border-gray-400 hover:bg-gray-300 sm:transform sm:translate-y-3 text-gray-700">결제 내역</a>
+			</div>
+		</nav>
+		<section class="mt-4 w-full px-4">
+			<div class="max-w-3xl mx-auto">
+				<div class="flex justify-end pb-6 border-b border-gray-300">
+					<a href="/mypage/popup/add" class="text-white bg-[#3FB8AF] hover:bg-[#2c817c] py-2 px-4 rounded-md transition-colors font-bold cursor-pointer">추가</a>
+				</div>
+
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-4">
+					<div class="relative p-4 border m-2 rounded-lg border-gray-300">
+						<a class="group mt-2 block relative overflow-hidden rounded-lg border border-gray-400" href="/mypage/popup/view">
+							<div class="absolute w-full h-full bg-gray-300 opacity-0 group-hover:opacity-50 transition left-0 top-0"></div>
+							<img class="min-h-68 w-full object-cover bg-gray-100" src="https://images.unsplash.com/photo-1656618724305-a4257e46e847?q=80&w=320&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+							<div class="absolute bottom-1 end-1 opacity-0 group-hover:opacity-100 transition">
+								<div class="flex items-center z-10 gap-x-1 py-1 px-2 bg-white border border-gray-200 text-gray-800 rounded-lg">
+									<svg class="shrink-0 size-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+									<span class="text-xs">상세보기</span>
+								</div>
+							</div>
+						</a>
+						<div class="space-y-2 mt-4 flex flex-col">
+							<h3 class="text-lg font-bold text-gray-900 hover:text-[#3FB8AF] transition-colors"><a href="/mypage/popup/view">팝업 제목</a></h3>
+							<span id="popup-type">유형</span>
+							<a href="/mypage/popup/request" class="hover:text-[#3FB8AF] transition-colors">입점 요청 확인 (입점 요청 <span id="request-count">1</span>건)</a>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</section>
+	</main>
+	<footer th:replace="~{fragments/footer.html :: footer}"></footer>
+</body>
+
+</html>

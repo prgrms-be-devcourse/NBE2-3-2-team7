@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>POP-UP Market</title>
+	<!-- Tailwind CSS -->
+	<link rel="stylesheet" href="/css/output.css">
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<!-- Flatpickr JS -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<!-- noUiSlider CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+	<!-- noUiSlider JS -->
+	<script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+	<!-- Common JS -->
+	<script src="/scripts/common.js" defer></script>
+	<!-- Place List JS -->
+	<script src="/scripts/place.list.js"></script>
+	<style>
+		.noUi-horizontal .noUi-handle {
+			width: 24px;
+			height: 20px;
+			right: -12px;
+			top: -2px;
+		}
+	</style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+	<header th:replace="~{fragments/header.html :: header}"></header>
+	<main class="flex-grow flex flex-col items-center">
+		<div class="flex  w-full mt-2 justify-center px-4">
+			<div class="max-w-7xl w-full">
+				<span class="font-bold text-xl ">임대지 목록</span>
+			</div>
+		</div>
+		<section class="flex w-full px-4 mx-2 md:sticky md:top-0 pt-2 md:z-10 bg-white">
+			<div class="flex w-full max-w-7xl space-x-0 md:space-x-2 border-t-2 border-b-2 border-[#3FB8AF] mx-auto py-2 justify-between items-center">
+				<div class="flex flex-col md:flex-row space-y-2 space-x-0 md:space-y-0 md:space-x-2">
+					<div class="flex space-y-2 space-x-0 xl:space-y-0 xl:space-x-2 flex-col xl:flex-row">
+						<div class="bg-white px-4 py-2 flex-col flex-shrink-0 border flex space-x-2 border-gray-300 rounded-md">
+							<label for="location" class="font-bold">지역</label>
+							<select id="location" class="w-full px-1">
+								<option value="all">전체</option>
+								<option value="서울">서울</option>
+								<option value="부산">부산</option>
+								<option value="대구">대구</option>
+								<option value="인천">인천</option>
+								<option value="광주">광주</option>
+								<option value="대전">대전</option>
+								<option value="울산">울산</option>
+								<option value="세종">세종</option>
+								<option value="경기">경기</option>
+								<option value="충북">충북</option>
+								<option value="충남">충남</option>
+								<option value="전북">전북</option>
+								<option value="전남">전남</option>
+								<option value="경북">경북</option>
+								<option value="경남">경남</option>
+								<option value="강원">강원</option>
+								<option value="제주">제주</option>
+							</select>
+						</div>
+						<div class="bg-white px-4 py-2 rounded-md border border-gray-300 min-w-60">
+							<div class="mb-2 flex justify-between">
+								<h3 class="font-bold">금액</h3>
+								<label id="price-range" class="text-center"></label>
+							</div>
+							<div id="price-slider" class="w-full"></div>
+						</div>
+					</div>
+					
+					<div class="flex space-y-2 space-x-0 xl:space-y-0 xl:space-x-2 flex-col xl:flex-row">
+						<div class="bg-white min-w-60 border px-4 border-gray-300 rounded-md p-2">
+							<label for="quick-calendar" class="font-bold">임대 기간</label>
+							<input type="text" id="quick-calendar" placeholder="기간을 선택하세요." class="w-full">
+						</div>
+						<div class="bg-white px-4 py-2 min-w-60 flex-shrink-0 rounded-md border border-gray-300">
+							<div class="mb-2 flex justify-between space-x-2">
+								<h3 class="font-bold">면적</h3>
+								<label id="place-range" class="text-center"></label>
+							</div>
+							<div id="place-slider" class="w-full"></div>
+						</div>
+					</div>
+				</div>
+				<div class="flex flex-shrink-0 space-x-0 xl:space-x-2 flex-col xl:flex-row h-full justify-between">
+					<div class="bg-white px-4 py-2 flex-col border flex space-x-2 border-gray-300 rounded-md">
+						<label for="sort" class="font-bold">정렬</label>
+						<select id="sort" class="w-full px-1">
+							<option value="default">최신</option>
+							<option value="registered-desc">등록일-내림차</option>
+							<option value="registered-asc">등록일-오름차</option>
+							<option value="price-desc">가격-내림차</option>
+							<option value="price-asc">가격-오름차</option>
+							<option value="area-desc">면적-내림차</option>
+							<option value="area-asc">면적-오름차</option>
+						</select>
+					</div>
+					<button class="py-2 bg-[#3FB8AF] text-white font-bold flex-grow-0 px-4 rounded-md hover:bg-[#2c817c] transition-colors duration-150">
+						조회
+					</button>
+				</div>
+			</div>
+		</section>
+
+		<section class="mt-4 w-full px-4">
+			<div class="max-w-7xl mx-auto">
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+					<!-- 아이템 샘플 -->
+					<a class="group drop-shadow-lg relative p-4 border m-2 rounded-lg border-gray-300" href="/rental/detail">
+						<div class="absolute w-full h-full bg-gray-300 opacity-0 group-hover:opacity-50 transition left-0 top-0"></div>
+						<div class="mt-2 block relative overflow-hidden rounded-lg border border-gray-400">
+							<img class="w-full size-40 object-cover bg-gray-100" src="https://images.unsplash.com/photo-1656618724305-a4257e46e847?q=80&w=320&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Project">
+							<div class="absolute bottom-1 end-1 opacity-0 group-hover:opacity-100 transition">
+								<div class="flex items-center z-10 gap-x-1 py-1 px-2 bg-white border border-gray-200 text-gray-800 rounded-lg">
+									<svg class="shrink-0 size-3" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+									<span class="text-xs">상세보기</span>
+								</div>
+							</div>
+						</div>
+						<div class="space-y-2 mt-4">
+							<h3 class="text-lg font-semibold text-gray-900">제목</h3>
+							<div class="flex justify-between">
+								<span>면적</span>
+								<span>가격 / 일</span>
+							</div>
+						</div>
+					</a>
+
+				</div>
+			</div>
+		</section>
+		<section class="mt-10 w-full px-4" aria-label="pagination">
+			<div class="flex items-center flex-col space-y-2 justify-center border-t border-gray-200 bg-white px-4 py-3">
+				<nav class="isolate inline-flex border rounded-md shadow-sm" aria-label="Pagination">
+
+					<!-- 페이지네이션 -->
+					<a href="#" class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 hover:bg-gray-100">
+						<span class="sr-only">이전</span>
+						<svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+							<path fill-rule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+						</svg>
+					</a>
+					<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-[#3FB8AF]">1</a>
+					<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100">2</a>
+					<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100">3</a>
+					<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100">4</a>
+					<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100">5</a>
+					<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100">6</a>
+					<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100">7</a>
+					<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100">8</a>
+					<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100">9</a>
+					<a href="#" class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-100">10</a>
+					<a href="#" class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 hover:bg-gray-100">
+						<span class="sr-only">다음</span>
+						<svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+							<path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+						</svg>
+					</a>
+				</nav>
+				<div>
+					<p class="text-sm text-gray-700">
+						Showing
+						<span class="font-medium">1</span>
+						to
+						<span class="font-medium">10</span>
+						of
+						<span class="font-medium">96</span>
+						results
+					</p>
+				</div>
+			</div>
+		</section>
+	</main>
+	<footer th:replace="~{fragments/footer.html :: footer}"></footer>
+</body>
+
+</html>
