@@ -1,4 +1,4 @@
-package com.project.popupmarket.dto.user;
+package com.project.popupmarket.dto.token;
 
 import lombok.Getter;
 import lombok.Setter;
