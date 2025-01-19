@@ -1,7 +1,7 @@
-package com.project.popupmarket.controller.user;
+package com.project.popupmarket.controller.token;
 
-import com.project.popupmarket.dto.user.CreateAccessTokenRequest;
-import com.project.popupmarket.dto.user.CreateAccessTokenResponse;
+import com.project.popupmarket.dto.token.CreateAccessTokenRequest;
+import com.project.popupmarket.dto.token.CreateAccessTokenResponse;
 import com.project.popupmarket.service.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

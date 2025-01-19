@@ -15,9 +15,6 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User oauth2User = super.loadUser(userRequest);
-
-        // OAuth2 사용자 정보만 반환하고, 회원 존재 여부는 SuccessHandler에서 처리
-        return oauth2User;
+        return super.loadUser(userRequest);
     }
 }

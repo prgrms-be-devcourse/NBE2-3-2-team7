@@ -1,5 +1,6 @@
 package com.project.popupmarket.service.user;
 
+import com.project.popupmarket.dto.auth.LoginRequest;
 import com.project.popupmarket.dto.user.UserRegisterDto;
 import com.project.popupmarket.dto.user.UserUpdateRequest;
 import com.project.popupmarket.entity.User;
@@ -8,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,27 +29,30 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-
-    @Value("${app.upload-path}")
-    private String uploadPath;
-
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     private final List<String> ALLOWED_EXTENSIONS = Arrays.asList(".jpg", ".jpeg", ".png", ".gif");
     private final long MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+    @Value("${app.upload-path}")
+    private String uploadPath;
 
     public Long save(UserRegisterDto dto) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        return userRepository.save(User.builder()
-                .email(dto.getEmail())
-                .password(encoder.encode(dto.getPassword()))
-                .brand(dto.getBrand())
-                .name(dto.getName())
-                .tel(dto.getTel())
-                .build()).getId();
+        return userRepository
+                .save(User
+                              .builder()
+                              .email(dto.getEmail())
+                              .password(encoder.encode(dto.getPassword()))
+                              .brand(dto.getBrand())
+                              .name(dto.getName())
+                              .tel(dto.getTel())
+                              .build())
+                .getId();
     }
 
     public User findById(Long userId) {
-        return userRepository.findById(userId)
+        return userRepository
+                .findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
     }
 
@@ -57,8 +62,8 @@ public class UserService {
 
     @Transactional
     public void updateUser(Long userId, UserUpdateRequest request) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        User user = userRepository.findById(userId)
+        User user = userRepository
+                .findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // 비밀번호 업데이트
@@ -72,31 +77,35 @@ public class UserService {
         if (StringUtils.hasText(request.getTel())) user.setTel(request.getTel());
 
         // 프로필 이미지 처리
-//        MultipartFile profileImage = request.getProfileImage();
-//        if (profileImage != null && !profileImage.isEmpty()) {
-//            validateProfileImage(profileImage);
-//            String oldImage = user.getProfileImage();
-//            String newFileName = saveProfileImage(profileImage);
-//            user.setProfileImage(newFileName);
-//
-//            // 기존 이미지 삭제 (기본 이미지가 아닌 경우에만)
-//            if (oldImage != null) {
-//                deleteProfileImage(oldImage);
-//            }
-//        }
+        //        MultipartFile profileImage = request.getProfileImage();
+        //        if (profileImage != null && !profileImage.isEmpty()) {
+        //            validateProfileImage(profileImage);
+        //            String oldImage = user.getProfileImage();
+        //            String newFileName = saveProfileImage(profileImage);
+        //            user.setProfileImage(newFileName);
+        //
+        //            // 기존 이미지 삭제 (기본 이미지가 아닌 경우에만)
+        //            if (oldImage != null) {
+        //                deleteProfileImage(oldImage);
+        //            }
+        //        }
 
         userRepository.save(user);
     }
 
+    // 프로필 이미지 유효성 검사
     private void validateProfileImage(MultipartFile file) {
         String originalFilename = file.getOriginalFilename();
         if (originalFilename == null || originalFilename.isEmpty()) {
             throw new RuntimeException("Invalid file name");
         }
 
-        String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
+        String fileExtension = originalFilename
+                .substring(originalFilename.lastIndexOf("."))
+                .toLowerCase();
         if (!ALLOWED_EXTENSIONS.contains(fileExtension)) {
-            throw new RuntimeException("Invalid file type. Only " + String.join(", ", ALLOWED_EXTENSIONS) + " are allowed");
+            throw new RuntimeException(
+                    "Invalid file type. Only " + String.join(", ", ALLOWED_EXTENSIONS) + " are allowed");
         }
 
         if (file.getSize() > MAX_FILE_SIZE) {
@@ -107,7 +116,9 @@ public class UserService {
     private String saveProfileImage(MultipartFile file) {
         try {
             String originalFilename = file.getOriginalFilename();
-            String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
+            String fileExtension = originalFilename
+                    .substring(originalFilename.lastIndexOf("."))
+                    .toLowerCase();
             String newFileName = UUID.randomUUID() + fileExtension;
 
             Path uploadDirectory = Paths.get(uploadPath);
@@ -126,7 +137,9 @@ public class UserService {
 
     private void deleteProfileImage(String fileName) {
         try {
-            Path filePath = Paths.get(uploadPath).resolve(fileName);
+            Path filePath = Paths
+                    .get(uploadPath)
+                    .resolve(fileName);
             Files.deleteIfExists(filePath);
         } catch (IOException e) {
             throw new RuntimeException("Failed to delete profile image", e);
@@ -136,16 +149,33 @@ public class UserService {
     // 사용자 삭제
     @Transactional
     public void deleteUser(Long userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository
+                .findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // 프로필 이미지 삭제 (기본 이미지가 아닌 경우에만)
-//        String profileImage = user.getProfileImage();
-//        if (profileImage != null) {
-//            deleteProfileImage(profileImage);
-//        }
+        //        String profileImage = user.getProfileImage();
+        //        if (profileImage != null) {
+        //            deleteProfileImage(profileImage);
+        //        }
 
         // 사용자 삭제
         userRepository.delete(user);
+    }
+
+    // 사용자 인증
+    public User authenticate(LoginRequest request) {
+        // 1. 이메일로 사용자 조회
+        User user = userRepository
+                .findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다."));
+
+        // 2. 비밀번호 검증
+        if (!encoder.matches(request.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+        }
+
+        // 3. 인증된 사용자 정보 반환 (SecurityContextHolder 설정 제거)
+        return user;
     }
 }

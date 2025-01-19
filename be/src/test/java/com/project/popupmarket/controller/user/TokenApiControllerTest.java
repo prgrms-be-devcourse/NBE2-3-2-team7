@@ -5,7 +5,7 @@ import com.project.popupmarket.config.jwt.JwtFactory;
 import com.project.popupmarket.config.jwt.JwtProperties;
 import com.project.popupmarket.entity.JwtToken;
 import com.project.popupmarket.entity.User;
-import com.project.popupmarket.dto.user.CreateAccessTokenRequest;
+import com.project.popupmarket.dto.token.CreateAccessTokenRequest;
 import com.project.popupmarket.repository.JwtTokenRepository;
 import com.project.popupmarket.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +67,6 @@ class TokenApiControllerTest {
                 .brand("testBrand")
                 .tel("010-1234-1234")
                 .name("Test User")
-                .profileImage("defaultProfileImage")
                 .build());
 
         String refreshToken = JwtFactory.builder()
@@ -75,7 +74,10 @@ class TokenApiControllerTest {
                 .build()
                 .createToken(jwtProperties);
 
-        jwtTokenRepository.save(new JwtToken(testUser.getId(), refreshToken));
+        jwtTokenRepository.save(JwtToken.builder()
+                .userId(testUser.getId())
+                .jwtToken(refreshToken)
+                .build());
 
         CreateAccessTokenRequest request = new CreateAccessTokenRequest();
         request.setRefreshToken(refreshToken);

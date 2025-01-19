@@ -68,6 +68,8 @@ public class User implements UserDetails {
         this.name = name;
         this.brand = brand;
         this.tel = tel;
+        this.role = Role.CUSTOMER;
+        this.social = AuthProvider.GOOGLE;
     }
 
     public User update(String nickname) {
