@@ -11,6 +11,9 @@ const routes = [
 	{ path: '/payment/success', component: () => import('../views/PaymentSuccess.vue') },
 	{ path: '/payment/failure', component: () => import('../views/PaymentFailure.vue') },
 	{ path: '/user', component: () => import('../views/User.vue') },
+	{ path: '/user/edit', component: () => import('../views/UserEdit.vue') },
+	{ path: '/user/land', component: () => import('../views/MyLandist.vue') },
+	{ path: '/user/landview', component: () => import('../views/MyLandView.vue') },
 ];
 
 const router = createRouter({

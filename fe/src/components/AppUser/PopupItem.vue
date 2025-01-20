@@ -21,9 +21,9 @@ defineProps({
       <!-- 텍스트 영역 -->
       <div class="flex flex-col justify-between ml-4 w-full">
         <span class="font-bold text-base">{{ title }}</span>
-        <div class="flex justify-between text-sm">
-          <p>{{ date }}</p>
+        <div class="flex flex-col justify-between text-sm">
           <p>{{ location }}</p>
+          <p>{{ date }}</p>
         </div>
       </div>
     </router-link>
