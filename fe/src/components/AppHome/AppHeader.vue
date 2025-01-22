@@ -17,7 +17,7 @@ const handleModal = () => {
 			<!-- 기존 로고 부분은 유지 -->
 			<div class="flex lg:flex-1">
 				<router-link to="/" class="-m-1.5 p-1.5">
-					<img class="h-16 w-auto" src="../assets/logo.png" alt="">
+					<img class="h-16 w-auto" src="../../assets/logo.png" alt="">
 				</router-link>
 			</div>
 
