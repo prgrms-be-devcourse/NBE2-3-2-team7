@@ -66,8 +66,6 @@ script.onload = () => {
 	};
 }
 
-
-
 </script>
 
 <template>

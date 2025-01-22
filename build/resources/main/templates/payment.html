@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>POP-UP Market</title>
+	<!-- Tailwind CSS -->
+	<link rel="stylesheet" href="/css/output.css">
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<!-- Flatpickr JS -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<!-- noUiSlider CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+	<!-- noUiSlider JS -->
+	<script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+	<!-- Toss Payment JS -->
+	<script src="https://js.tosspayments.com/v2/standard"></script>
+	<!-- Common JS -->
+	<script src="/scripts/common.js" defer></script>
+	<!-- Payment JS -->
+	<script src="/scripts/payment.js"></script>
+	<style>
+		.noUi-horizontal .noUi-handle {
+			width: 24px;
+			height: 20px;
+			right: -12px;
+			top: -2px;
+		}
+	</style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+	<header th:replace="~{fragments/header.html :: header}"></header>
+	<main class="flex-grow flex flex-col items-center">
+		<section class="flex mt-10 px-4">
+			<div class="max-w-5xl mx-auto border p-6 bg-white rounded-lg shadow-lg">
+				<h1 class="text-2xl md:text-3xl font-bold mb-8 text-center text-gray-800">결제 페이지</h1>
+				<div class="mb-8 border-b pb-6">
+					<h2 class="text-xl md:text-2xl font-semibold mb-4 text-gray-700">예약 정보</h2>
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<p class="text-gray-600">임대지</p>
+							<p class="font-semibold text-gray-800 text-lg">홍대 팝업스토어 공간</p>
+						</div>
+						<div>
+							<p class="text-gray-600">대여 기간</p>
+							<p class="font-semibold text-gray-800 text-lg">2024년 06월 01일 ~ 2024년 06월 05일</p>
+						</div>
+						<div>
+							<p class="text-gray-600">일일 금액</p>
+							<p class="font-semibold text-gray-800 text-lg">100,000원 / 일</p>
+						</div>
+						<div>
+							<p class="text-gray-600">총 결제 금액</p>
+							<p class="text-xl font-bold text-[#3FB8AF]">500,000원</p>
+						</div>
+						<div class="md:col-span-2">
+							<p class="text-gray-600">주소</p>
+							<p class="font-medium text-gray-800">서울특별시 마포구 홍대입구로 123-45</p>
+						</div>
+						<div class="md:col-span-2">
+							<p class="text-gray-600">설명</p>
+							<p class="text-gray-700">유동인구가 많은 홍대 메인 거리의 팝업스토어 공간입니다. 전시, 행사, 판매에 적합하며 다양한 인테리어 옵션을 제공합니다.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="mb-8">
+					<h2 class="text-xl md:text-2xl font-semibold mb-4 text-gray-700">결제 수단 선택</h2>
+					<div id="payment-method" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+					</div>
+				</div>
+				
+				<div id="agreement" class="mb-8">
+				</div>
+
+				<div class="text-center">
+					<button id="payment-button" type="button" class="w-full md:w-1/3 bg-[#3FB8AF] text-white font-semibold py-3 rounded-lg hover:bg-[#2C817C] transition-colors">
+						결제하기
+					</button>
+					<!-- 나머지는 스프링으로 옮기면 로직 완성해야된다. -->
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer th:replace="~{fragments/footer.html :: footer}"></footer>
+</body>
+
+</html>

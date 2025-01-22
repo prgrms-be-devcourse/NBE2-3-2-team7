@@ -18,7 +18,7 @@
 		background: #3FB8AF;
 		border-radius: 100vh;
 	}
-
+  
 	.list_scrollbar::-webkit-scrollbar-thumb:active {
 		background: #2c817c;
 	}

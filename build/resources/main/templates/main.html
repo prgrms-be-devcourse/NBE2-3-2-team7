@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POP-UP Market</title>
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/css/output.css">
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- noUiSlider CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+    <!-- noUiSlider JS -->
+    <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+    <!-- Common JS -->
+    <script src="/scripts/common.js" defer></script>
+    <!-- Main JS -->
+    <script src="/scripts/main.js"></script>
+    <style>
+        /* 테일윈드 클래스를 사용하여 손잡이 크기 조정 */
+        .noUi-horizontal .noUi-handle {
+            width: 24px; /* 손잡이 너비 */
+            height: 20px; /* 손잡이 높이 */
+            right: -12px;
+            top: -2px;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+<header th:replace="~{fragments/header.html :: header}"></header>
+<main class="flex-grow flex flex-col items-center">
+    <article class="relative w-full min-h-96 max-h-128 flex overflow-hidden bg-slate-500">
+        <!-- 슬라이드 배너 컨테이너 -->
+        <div id="slide-container" class="flex w-full transition-transform duration-1000" style="transform: translateX(0%);">
+            <!-- 슬라이드 항목 1 -->
+            <div class="w-full h-full flex-shrink-0">
+                <img src="" class="mx-auto h-full w-full object-cover" alt="">
+            </div>
+            <!-- 슬라이드 항목 2 -->
+            <div class="w-full h-full flex-shrink-0">
+                <img src="" class="mx-auto h-full w-full object-cover" alt="">
+            </div>
+            <!-- 슬라이드 항목 3 -->
+            <div class="w-full h-full flex-shrink-0">
+                <img src="" class="mx-auto h-full w-full object-cover" alt="">
+            </div>
+        </div>
+        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-4 items-center">
+            <button id="left-slide-arr" class="text-2xl text-white px-3 rounded-full hover:bg-gray-300 opacity-50 flex items-center justify-center">
+                &#10094;
+            </button>
+            <button class="indicator hover:bg-blue-300 w-5 h-5 bg-gray-400 opacity-50 rounded-full"></button>
+            <button class="indicator hover:bg-blue-300 w-5 h-5 bg-gray-400 opacity-50 rounded-full"></button>
+            <button class="indicator hover:bg-blue-300 w-5 h-5 bg-gray-400 opacity-50 rounded-full"></button>
+            <button id="right-slide-arr" class="text-2xl text-white px-3 rounded-full hover:bg-gray-300 opacity-50 flex items-center justify-center">
+                &#10095;
+            </button>
+        </div>
+    </article>
+    <section class="flex mt-10">
+        <div class="flex w-full flex-col">
+            <div class="flex">
+                <button id="main-filter-place" onclick="findPlace()" class="relative transform text-white transition-all duration-150 p-2 rounded-t-md font-bold bg-[#3FB8AF]">
+                    장소 찾아요🙋
+                </button>
+                <button id="main-filter-event" onclick="findEvent()" class="relative transform text-black translate-y-2 transition-all duration-150 p-2 rounded-t-md font-bold bg-[#d8d7d7]">
+                    팝업 찾아요🙋
+                </button>
+            </div>
+            <div class="z-10 bg-white max-w-7xl border-t-2 border-b-2 border-[#3FB8AF] mx-auto p-4 flex items-center justify-center">
+                <div id="main-filter-box" class="flex flex-col min-w-80 lg:flex-row lg:space-y-0 lg:space-x-4 space-y-4">
+                    <div class="flex space-x-4">
+                        <div class="bg-white px-4 py-2 flex-grow rounded-md border border-gray-300">
+                            <div class="mb-2 flex justify-between space-x-2">
+                                <h3 class="font-bold">면적</h3>
+                                <label id="place-range" class="text-center"></label>
+                            </div>
+                            <div id="place-slider" class="w-full"></div>
+                        </div>
+                        <div class="bg-white px-4 py-2 flex-shrink-0 border border-gray-300 rounded-md">
+                            <label for="location" class="font-bold">지역</label>
+                            <select id="location" class="w-full px-1">
+                                <option value="all">지역</option>
+                                <option value="서울">서울</option>
+                                <option value="부산">부산</option>
+                                <option value="대구">대구</option>
+                                <option value="인천">인천</option>
+                                <option value="광주">광주</option>
+                                <option value="대전">대전</option>
+                                <option value="울산">울산</option>
+                                <option value="세종">세종</option>
+                                <option value="경기">경기</option>
+                                <option value="충북">충북</option>
+                                <option value="충남">충남</option>
+                                <option value="전북">전북</option>
+                                <option value="전남">전남</option>
+                                <option value="경북">경북</option>
+                                <option value="경남">경남</option>
+                                <option value="강원">강원</option>
+                                <option value="제주">제주</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="bg-white px-4 py-2 rounded-md border border-gray-300 min-w-72">
+                        <div class="mb-2 flex justify-between">
+                            <h3 class="font-bold">금액</h3>
+                            <label id="price-range" class="text-center"></label>
+                        </div>
+                        <div id="price-slider" class="w-full"></div>
+                    </div>
+                    <div class="bg-white min-w-60 border px-4 border-gray-300 rounded-md p-2">
+                        <label for="quick-calendar" class="block font-bold">임대 기간</label>
+                        <input type="text" id="quick-calendar" placeholder="기간을 선택하세요." class="w-full">
+                    </div>
+
+                    <button id="find-item" class="py-2 bg-[#3FB8AF] text-white font-bold flex-shrink-0 flex-grow-0 px-4 rounded-md hover:bg-[#2c817c] transition-colors duration-150">
+                        조회
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mt-10 w-full px-4">
+        <div class="border-2 max-w-7xl  mx-auto rounded-2xl ">
+            <h3 class="pl-8 mt-4 text-2xl">등록 데이터 10개</h3>
+            <div class="relative rounded-xl overflow-auto my-4"><!-- Snap Point -->
+                <!-- Contents -->
+                <div class="relative w-full flex gap-6 snap-x list_scrollbar overflow-x-auto pb-6">
+                    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+                        <a class="rounded-md flex flex-col p-4 shadow-xl bg-white border hover:transform hover:translate-y-[-10px] transition-transform duration-200" href="#">
+                            <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=320&amp;h=160&amp;q=80" alt="">
+                            <span class="my-4 font-bold">제목</span>
+                            <div class="flex justify-between">
+                                <p>가격</p>
+                                <p>장소</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="mt-10 w-full px-4">
+        <div class="border-2 max-w-7xl mx-auto rounded-2xl ">
+            <h3 class="pl-8 mt-4 text-2xl">등록 데이터 10개</h3>
+            <div class="relative rounded-xl overflow-auto my-4"><!-- Snap Point -->
+                <!-- Contents -->
+                <div class="relative w-full flex gap-6 snap-x list_scrollbar overflow-x-auto pb-6">
+                    <div class="snap-center shrink-0 first:pl-8 last:pr-8">
+                        <a class="rounded-md flex flex-col p-4 shadow-xl bg-white border hover:transform hover:translate-y-[-10px] transition-transform duration-200" href="#">
+                            <img class="shrink-0 w-80 h-40 rounded-lg shadow-xl bg-white" src="https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=320&amp;h=160&amp;q=80" alt="">
+                            <span class="my-4 font-bold">제목</span>
+                            <div class="flex justify-between">
+                                <p>가격</p>
+                                <p>장소</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+
+</html>

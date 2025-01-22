@@ -1,22 +1,28 @@
 <script setup>
+
+// 초반 import 구문
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { initFlatpickr } from '../utils/init.plugin';
 import BasePaging from '../components/ItemList/BasePaging.vue';
 import PopupCard from '../components/ItemList/PopupCard.vue';
 
+// 예시 팝업 데이터
 const popup = [
 	{ title: '팝업스토어 1', image: 'https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=320&amp;h=160&amp;q=80', type: '아이돌', location: '대구', link: '/popup/1', start: '2025-01-02', end: '2025-01-12' },
 	{ title: '팝업스토어 2', image: 'https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=320&amp;h=160&amp;q=80', type: '만화', location: '인천', link: '/popup/2', start: '2025-01-04', end: '2025-01-14' }
 ];
 
 
+// 라우터 설정 및 초기화
 const router = useRouter();
 
 onMounted(() => {
 	initFlatpickr();
 });
 
+
+// 사용자가 입력한 검색 조건 가져오기 -> URL 쿼리 파라미터 생성 -> 페이지 이동
 const findPopup = () => {
 	const loc = document.getElementById('location');
 	const type = document.getElementById('type');
@@ -39,6 +45,8 @@ const findPopup = () => {
 	router.push({ path: '/popup', query });
 };
 
+// 사용자는 검색 필드 입력 -> 검색 버튼 -> findPopup 함수 호출
+// -> 조건에 따라 URL 변경 ex. /popup?location=대구&type=애니메이션 ..
 </script>
 
 <template>
