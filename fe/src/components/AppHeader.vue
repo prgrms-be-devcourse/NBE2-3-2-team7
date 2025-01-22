@@ -44,13 +44,13 @@ const handleModal = () => {
 
 			<!-- 로그인/로그아웃 버튼 수정 -->
 			<div class="hidden lg:flex lg:flex-1 lg:justify-end">
-				<router-link to="/login" id="login-button"
+				<router-link to="/signin" id="login-button"
 					class="text-xl/6 font-semibold p-4 rounded-lg hover:bg-slate-200 transition-colors hover:text-[#3FB8AF] text-gray-900">
-					Log in <span aria-hidden="true">&rarr;</span>
+					Sign in <span aria-hidden="true">&rarr;</span>
 				</router-link>
 				<button id="logout-button" style="display: none"
 					class="text-xl/6 font-semibold p-4 rounded-lg hover:bg-slate-200 transition-colors hover:text-[#3FB8AF] text-gray-900">
-					Log out <span aria-hidden="true">&rarr;</span>
+					Sign out <span aria-hidden="true">&rarr;</span>
 				</button>
 			</div>
 		</nav>

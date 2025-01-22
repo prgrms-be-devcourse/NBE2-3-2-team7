@@ -1,4 +1,5 @@
 <script setup>
+
 // 초반 import 구문
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
@@ -12,12 +13,14 @@ const popup = [
 	{ title: '팝업스토어 2', image: 'https://images.unsplash.com/photo-1604999565976-8913ad2ddb7c?ixlib=rb-1.2.1&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=320&amp;h=160&amp;q=80', type: '만화', location: '인천', link: '/popup/2', start: '2025-01-04', end: '2025-01-14' }
 ];
 
+
 // 라우터 설정 및 초기화
 const router = useRouter();
 
 onMounted(() => {
 	initFlatpickr();
 });
+
 
 // 사용자가 입력한 검색 조건 가져오기 -> URL 쿼리 파라미터 생성 -> 페이지 이동
 const findPopup = () => {

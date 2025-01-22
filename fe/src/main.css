@@ -1,3 +1,4 @@
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,5 +17,27 @@
 	.list_scrollbar::-webkit-scrollbar-thumb {
 		background: #3FB8AF;
 		border-radius: 100vh;
+	}
+  
+	.list_scrollbar::-webkit-scrollbar-thumb:active {
+		background: #2c817c;
+	}
+
+	.height_scrollbar::-webkit-scrollbar {
+		width: 10px;
+	}
+
+	.height_scrollbar::-webkit-scrollbar-track {
+		border-radius: 100vh;
+		margin: 4px;
+	}
+
+	.height_scrollbar::-webkit-scrollbar-thumb {
+		background: #3FB8AF;
+		border-radius: 100vh;
+	}
+
+	.height_scrollbar::-webkit-scrollbar-thumb:active {
+		background: #2c817c;
 	}
 }

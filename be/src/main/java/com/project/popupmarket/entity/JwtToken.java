@@ -1,11 +1,11 @@
 package com.project.popupmarket.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Entity
 public class JwtToken {
@@ -20,11 +20,6 @@ public class JwtToken {
 
     @Column(name = "jwt_token", nullable = false)
     private String jwtToken;
-
-    public JwtToken(Long userId, String jwtToken) {
-        this.userId = userId;
-        this.jwtToken = jwtToken;
-    }
 
     public JwtToken update(String newJwtToken) {
         this.jwtToken = newJwtToken;
