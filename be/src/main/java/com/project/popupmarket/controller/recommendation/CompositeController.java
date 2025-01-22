@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -60,7 +63,13 @@ public class CompositeController {
     }
 
     @GetMapping("/test/data")
-    public ResponseEntity<String> getTestData() {
-        return ResponseEntity.ok("성공~");
+    public ResponseEntity<Map<String, String>> getTestData() {
+        Map<String, String> map = new HashMap<>();
+        map.put("이름", "대호");
+        map.put("나이", "25살");
+        map.put("성별", "남성");
+        map.put("직업", "무직");
+
+        return ResponseEntity.ok(map);
     }
 }

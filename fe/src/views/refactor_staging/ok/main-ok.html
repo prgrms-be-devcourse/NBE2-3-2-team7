@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POP-UP Market</title>
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/css/output.css">
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- noUiSlider CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+    <!-- noUiSlider JS -->
+    <script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+    <!-- Common JS -->
+    <script src="/scripts/common.js" defer></script>
+    <!-- Main JS -->
+    <script src="/scripts/main.js" defer></script>
+    <style>
+        /* 테일윈드 클래스를 사용하여 손잡이 크기 조정 */
+        .noUi-horizontal .noUi-handle {
+            width: 24px; /* 손잡이 너비 */
+            height: 20px; /* 손잡이 높이 */
+            right: -12px;
+            top: -2px;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+<header th:replace="~{fragments/header.html :: header}"></header>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>
