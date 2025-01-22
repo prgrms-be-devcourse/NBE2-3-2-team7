@@ -12,7 +12,7 @@ const emit = defineEmits(['close']);
 			<div class="flex items-center justify-between">
 				<!-- 기존 내용 유지 -->
 				<router-link to="/" class="-m-1.5 p-1.5">
-					<img class="h-16 w-auto" src="../assets/logo.png" alt="">
+					<img class="h-16 w-auto" src="@/assets/logo.png" alt="">
 				</router-link>
 				<button @click="emit('close')" type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
 					<svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"

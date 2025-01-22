@@ -10,7 +10,7 @@ export const useUserStore = defineStore('user', {
 		setUser(user) {
 			this.id = user.id;
 			this.role = user.role;
-			this.auth = !!user;
+			this.auth = true;
 		},
 		clearUser() {
 			this.id = 0;
