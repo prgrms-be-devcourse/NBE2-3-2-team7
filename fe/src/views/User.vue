@@ -1,13 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import LandItem from '../components/AppUser/LandItem.vue';
-import PaymentItem from '../components/AppUser/PaymentItem.vue';
-import PopupItem from '../components/AppUser/PopupItem.vue';
+import LandItem from '../components/AppUser/MyLandItem.vue';
+import PaymentItem from '../components/AppUser/MyPaymentItem.vue';
+import PopupItem from '../components/AppUser/MyPopupItem.vue';
 import Statistics from '../components/AppUser/Statistics.vue';
 
 const user = [
-  { name: "바쿠고", image: "https://image.zeta-ai.io/profile-image/1248e692-a5ea-4504-b25b-cafba0065925/264b67a1-887d-4959-aa04-43bf10935f4d.jpeg?w=3840&q=75&f=webp", email: "admin@test.com", tel: "010-1234-5678", role: "customer", businessId: "123-456-789"}
+  { name: "바쿠고", image: "https://image.zeta-ai.io/profile-image/1248e692-a5ea-4504-b25b-cafba0065925/264b67a1-887d-4959-aa04-43bf10935f4d.jpeg?w=3840&q=75&f=webp", email: "admin@test.com", tel: "010-1234-5678", role: "landlord", businessId: "123-456-789"}
 ];
 
 const land = [
@@ -121,7 +120,14 @@ const id = 123;
                 <h3 class="text-lg">
                   {{ role === 'customer' ? '결제 내역' : '수익 통계 대시보드' }}
                 </h3>
-                <button id="view-all-btn" type="button" class="text-black font-bold p-1 hover:text-gray-700 transition-colors rounded-md hover:bg-gray-100">전체 보기</button>
+                <a
+                    href="/user/payment"
+                    class="text-black font-bold p-1 hover:text-gray-700 transition-colors rounded-md hover:bg-gray-100"
+                >
+                  <button id="view-all-btn" type="button">
+                    전체 보기
+                  </button>
+                </a>
               </div>
               <div id="payment-box" class="grid grid-cols-1 gap-2" style="max-width: 100%;">
                 <template v-if="role === 'customer'">

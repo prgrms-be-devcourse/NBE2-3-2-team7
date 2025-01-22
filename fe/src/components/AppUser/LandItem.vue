@@ -1,30 +1,37 @@
-<script setup>
-import { RouterLink } from 'vue-router';
-
-defineProps({
-  link: String,
-  image: String,
-  title: String,
-  date: String,
-});
+<script>
+export default {
+  props: {
+    item: {
+      type: Object,
+      required: true,
+    },
+  },
+};
 </script>
 
 <template>
-  <div class="flex gap-2 overflow-x-scroll px-4">
-    <router-link :to="link"
-                 class="rounded-md flex p-4 shadow-xl bg-white border hover:transform hover:translate-y-[-10px] transition-transform duration-200 w-full max-w-[600px] h-24">
-      <!-- 썸네일 이미지 -->
-      <img class="w-32 h-20 rounded-lg shadow-xl bg-white" :src="image" :alt="title">
-
-      <!-- 텍스트 영역 -->
-      <div class="flex flex-col justify-between ml-4 w-full">
-        <span class="font-bold text-base">{{ title }}</span>
-        <div class="flex justify-between text-sm">
-          <p>{{ date }}</p>
-        </div>
-      </div>
-    </router-link>
-  </div>
+  <router-link :to="`/user/land/${item.id}`" class="w-full h-full relative flex flex-col items-center justify-center">
+    <span class="absolute top-1 right-2 bg-white bg-opacity-75 text-gray-900 text-base font-bold px-2 py-1 rounded mb-2">
+        {{ item.location }}
+    </span>
+    <div class="relative w-full h-3/5 flex items-center justify-center bg-gray-100">
+      <img :src="item.image" alt="이미지" class="max-w-full max-h-full object-contain " />
+    </div>
+    <div class="w-full flex flex-col justify-between p-1 bg-white h-1/8 rounded-b-lg pt-4">
+      <h3 class="text-base text-left truncate">{{ item.title }}</h3>
+      <router-link
+          :to="`/user/land/${item.id}/reservation`"
+          class="text-green-700 hover:underline cursor-pointer"
+      >
+        예약 현황 보기 ( {{item.status}} )
+      </router-link>
+    </div>
+  </router-link>
 </template>
 
-<style scoped></style>
+<style scoped>
+.relative {
+  position: relative;
+}
+</style>
+

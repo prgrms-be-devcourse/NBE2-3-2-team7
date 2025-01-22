@@ -15,13 +15,13 @@ defineProps({
   <div class="flex gap-1 overflow-x-scroll px-4">
     <router-link :to="link"
                  class="rounded-md flex justify-between items-center p-4 shadow-xl bg-white border transition-transform duration-200 w-full max-w-[600px] h-16">
-        <span class="font-bold text-base">{{ date }}</span>
-        <!-- 세로로 나열되는 date, amount, status -->
+      <span class="font-bold text-base">{{ date }}</span>
+      <!-- 세로로 나열되는 date, amount, status -->
       <div class="flex flex-col text-sm space-y-0.5 text-right">
-      <p>{{ landitem }}</p>
-          <p>{{ amount }}</p>
-          <p>{{ status }}</p>
-        </div>
+        <p>{{ landitem }}</p>
+        <p>{{ amount }}</p>
+        <p>{{ status }}</p>
+      </div>
     </router-link>
   </div>
 </template>

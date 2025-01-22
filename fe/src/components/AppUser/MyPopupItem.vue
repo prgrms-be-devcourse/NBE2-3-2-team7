@@ -2,9 +2,11 @@
 import { RouterLink } from 'vue-router';
 
 defineProps({
+
   link: String,
   image: String,
   title: String,
+  location: String,
   date: String,
 });
 </script>
@@ -19,7 +21,8 @@ defineProps({
       <!-- 텍스트 영역 -->
       <div class="flex flex-col justify-between ml-4 w-full">
         <span class="font-bold text-base">{{ title }}</span>
-        <div class="flex justify-between text-sm">
+        <div class="flex flex-col justify-between text-sm">
+          <p>{{ location }}</p>
           <p>{{ date }}</p>
         </div>
       </div>
