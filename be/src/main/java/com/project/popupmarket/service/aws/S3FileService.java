@@ -8,12 +8,9 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
-import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
-import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 import java.io.IOException;
-import java.net.URL;
-import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -66,8 +63,8 @@ public class S3FileService {
                 .collect(Collectors.toList());
     }
 
-    public String uploadSingleImage(MultipartFile image, Long userId, Long categoryId, String category) throws IOException {
-        String key = String.format("%s/%d_%d_thumbnail_%s", category, userId, categoryId, image.getOriginalFilename());
+    public String uploadSingleImage(MultipartFile image, Long categoryId, String category) throws IOException {
+        String key = String.format("%s/%d_thumbnail.png", category, categoryId);
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucket)
@@ -82,12 +79,12 @@ public class S3FileService {
         return getImageUrl(key);
     }
 
-    public List<String> uploadMultipleImages(List<MultipartFile> images, Long userId, Long categoryId, String category) throws IOException {
+    public List<String> uploadMultipleImages(List<MultipartFile> images, Long categoryId, String category) throws IOException {
         return images.stream()
                 .map(image -> {
                     try {
                         int imageIndex = images.indexOf(image) + 1;
-                        String key = String.format("%s/%d_%d_images_%d_%s", category, userId, categoryId, imageIndex, image.getOriginalFilename());
+                        String key = String.format("%s/%d_images_%d.png", category, categoryId, imageIndex);
 
                         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                                 .bucket(bucket)
@@ -107,8 +104,8 @@ public class S3FileService {
                 .collect(Collectors.toList());
     }
 
-    public String getSingleImage(String category, Long userId, Long categoryId) {
-        String prefix = String.format("%s/%d_%d_thumbnail_", category, userId, categoryId);
+    public String getSingleImage(String category, Long categoryId) {
+        String prefix = String.format("%s/%d_thumbnail_", category, categoryId);
 
         ListObjectsV2Request request = ListObjectsV2Request.builder()
                 .bucket(bucket)
@@ -121,11 +118,11 @@ public class S3FileService {
                 .findFirst()
                 .map(S3Object::key)
                 .map(this::getImageUrl)
-                .orElseThrow(() -> new RuntimeException("No single image found for userId: " + userId));
+                .orElseThrow(() -> new RuntimeException("No single image found for categoryId: " + categoryId));
     }
 
-    public List<String> getMultipleImages(String category, Long userId, Long categoryId) {
-        String prefix = String.format("%s/%d_%d_images_", category, categoryId, userId);
+    public List<String> getMultipleImages(String category, Long categoryId) {
+        String prefix = String.format("%s/%d_images_", category, categoryId);
 
         ListObjectsV2Request request = ListObjectsV2Request.builder()
                 .bucket(bucket)
@@ -141,8 +138,8 @@ public class S3FileService {
                 .collect(Collectors.toList());
     }
 
-    public List<String> deleteFiles(String category, Long userId, Long categoryId) {
-        String prefix = String.format("%s/%d_%d_", category, userId,categoryId);
+    public List<String> deleteFiles(String category, Long categoryId) {
+        String prefix = String.format("%s/%d_", category, categoryId);
 
         ListObjectsV2Request listRequest = ListObjectsV2Request.builder()
                 .bucket(bucket)
@@ -165,6 +162,29 @@ public class S3FileService {
         });
 
         return keysToDelete;
+    }
+
+    private final String cloudFrontDomain = "https://d3kh2vqqajwnym.cloudfront.net";
+    public String getCloudFrontImageUrl(String filePath) {
+//        "/land/0_0_thumbnail_test.png"
+        return cloudFrontDomain + filePath;
+    }
+    public List<String> getCloudFrontImageListUrl(String filePath) {
+//        "/land/0_0_images_0.png"
+
+        ListObjectsV2Request request = ListObjectsV2Request.builder()
+                .bucket(bucket)
+                .prefix(filePath)
+                .build();
+
+        ListObjectsV2Response response = s3Client.listObjectsV2(request);
+
+        List<String> imageUrls = new ArrayList<>();
+        for (S3Object s3Object : response.contents()) {
+            imageUrls.add(cloudFrontDomain + s3Object.key());
+        }
+
+        return imageUrls;
     }
 
     private String getImageUrl(String fileName) {
