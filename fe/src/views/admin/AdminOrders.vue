@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed } from "vue";
-import BasePaging from "../../components/common/BasePaging.vue";
-import DetailRow from "../../components/AdminHome/orders/DetailRow.vue"
-import RefundModal from "../../components/AdminHome/orders/RefundModal.vue";
+import BasePaging from "@/components/common/BasePaging.vue";
+import DetailRow from "@/components/admin/orders/DetailRow.vue"
+import RefundModal from "@/components/admin/orders/RefundModal.vue";
 
 const selectedStatus = ref("");
 const selectedOrder = ref(null);

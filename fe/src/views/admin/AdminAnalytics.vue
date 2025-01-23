@@ -2,7 +2,7 @@
 import { Chart, registerables } from 'chart.js';
 import { BarChart } from 'vue-chart-3';
 import { ref, computed, onMounted } from 'vue';
-import { initNoMinDateFlatpickr } from '../../utils/init.plugin'
+import { initNoMinDateFlatpickr } from '@/utils/init.plugin'
 
 
 Chart.register(...registerables);

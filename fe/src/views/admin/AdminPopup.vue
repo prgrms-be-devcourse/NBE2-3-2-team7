@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed } from "vue";
-import DeleteModal from "../../components/AdminHome/popup/DeleteModal.vue";
-import BasePaging from "../../components/common/BasePaging.vue";
-import DetailRow from "../../components/AdminHome/popup/DetailRow.vue";
+import DeleteModal from "@/components/admin/popup/DeleteModal.vue";
+import BasePaging from "@/components/common/BasePaging.vue";
+import DetailRow from "@/components/admin/popup/DetailRow.vue";
 
 const isDeleteModalOpen = ref(false);
 const selectedUser = ref(null);

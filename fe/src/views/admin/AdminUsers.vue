@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed } from "vue";
-import DeleteModal from "../../components/AdminHome/users/DeleteModal.vue";
-import BasePaging from "../../components/common/BasePaging.vue";
-import AddModal from "../../components/AdminHome/users/AddModal.vue";
-import DetailRow from "../../components/AdminHome/users/DetailRow.vue";
+import DeleteModal from "@/components/admin/users/DeleteModal.vue";
+import BasePaging from "@/components/common/BasePaging.vue";
+import AddModal from "@/components/admin/users/AddModal.vue";
+import DetailRow from "@/components/admin/users/DetailRow.vue";
 
 const isDeleteModalOpen = ref(false);
 const isAddModalOpen = ref(false);
