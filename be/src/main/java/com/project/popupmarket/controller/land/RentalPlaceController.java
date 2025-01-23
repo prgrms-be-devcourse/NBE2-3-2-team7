@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -75,22 +76,6 @@ public class RentalPlaceController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "임대지 추가")
-    @PostMapping(value = "/rental", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> insertRentalPlace( // 임대페이지 데이터 create
-            @RequestPart("rentalPlace") RentalLandTO rentalPlace,
-            @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
-            @RequestPart("images") List<MultipartFile> images
-    ) {
-        Long userSeq = userContextUtil.getUserId();
-
-        rentalPlace.setLandlordId(userSeq);
-
-//        rentalLandService.insertRentalPlaceWithImages(rentalPlace, thumbnail, images);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
     @GetMapping("/rental/{id}")
     @Operation(summary = "개별 임대지 조회")
     public ResponseEntity<RentalLandRespTO> rentalPlaceById(
@@ -105,6 +90,21 @@ public class RentalPlaceController {
         return ResponseEntity.ok(null);
     }
 
+    @Operation(summary = "임대지 추가")
+    @PostMapping(value = "/rental", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> insertRentalPlace( // 임대페이지 데이터 create
+            @RequestPart("rentalPlace") RentalLandTO rentalPlaceTO,
+            @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
+            @RequestPart("images") List<MultipartFile> images
+    ) throws IOException {
+        Long userSeq = userContextUtil.getUserId();
+        rentalPlaceTO.setLandlordId(userSeq);
+
+        rentalLandService.insertRentalPlace(rentalPlaceTO, thumbnail, images);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
     @PutMapping("/rental/{id}")
     @Operation(summary = "개별 임대지 수정")
     public ResponseEntity<Void> updateRentalPlace(
@@ -112,14 +112,13 @@ public class RentalPlaceController {
             @RequestPart("rentalPlace") RentalLandTO rentalPlaceTO,
             @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
             @RequestPart("images") List<MultipartFile> images
-    ) {
+    ) throws IOException {
 
         rentalPlaceTO.setId(id);
         rentalPlaceTO.setLandlordId(userContextUtil.getUserId());
 
-        rentalLandService.insertRentalPlace(rentalPlaceTO, thumbnail);
-//        rentalLandService.deleteRentalPlaceImageById(id);
-//        rentalLandService.updateRentalPlaceImage(id,images);
+        rentalLandService.deleteRentalImageById(id);
+        rentalLandService.insertRentalPlace(rentalPlaceTO, thumbnail, images);
 
         return ResponseEntity.noContent().build();
     }
@@ -130,9 +129,7 @@ public class RentalPlaceController {
             @PathVariable Long id
     ) {
         rentalLandService.deleteRentalPlaceById(id);
-
         return ResponseEntity.noContent().build(); // 상태 코드 204 반환
     }
-
 
 }

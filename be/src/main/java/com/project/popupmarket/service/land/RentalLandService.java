@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -77,10 +78,6 @@ public class RentalLandService {
                 .orElse(null);
     }
 
-//    public String findPlaceThumbnailById(Long placeSeq) {
-//        return rentalPlaceJpaRepository.findById(placeSeq).get().getThumbnail();
-//    }
-
     public Page<RentalLandRespTO> findFilteredWithPagination(
             Integer minCapacity, Integer maxCapacity, String location,
             BigDecimal minPrice, BigDecimal maxPrice,
@@ -104,20 +101,6 @@ public class RentalLandService {
                 });
     }
 
-//    public List<RentalPlaceImageTO> findRentalPlaceImageList (Long id) {
-//
-//        List<RentalPlaceImageList> lists = rentalPlaceImageListJpaRepository.findRentalPlaceImageList(id);
-//
-//        List<RentalPlaceImageTO> toList = new ArrayList<>();
-//        for (RentalPlaceImageList result : lists) {
-//            RentalPlaceImageTO to = new RentalPlaceImageTO();
-//            to.setRentalPlaceSeq(result.getId().getRentalPlaceSeq());
-//            to.setImage(result.getId().getImage());
-//            toList.add(to);
-//        }
-//
-//        return toList;
-//    }
 
     public List<RentalLandRespTO> findRentalPlacesByUserId(Long userSeq) {
         ModelMapper modelMapper = new ModelMapper();
@@ -145,30 +128,20 @@ public class RentalLandService {
     }
 
     @Transactional
-    public void insertRentalPlace(RentalLandTO to, MultipartFile thumbnail){
+    public void insertRentalPlace(
+            RentalLandTO to,
+            MultipartFile thumbnail,
+            List<MultipartFile> images) throws IOException {
+        // RentalPlace 저장
         ModelMapper mapper = new ModelMapper();
         RentalLand rentalLand = mapper.map(to, RentalLand.class);
         rentalLand.setStatus(ActivateStatus.ACTIVE);
 
         RentalLand savedPlace = rentalLandJpaRepository.save(rentalLand);
+        Long id = savedPlace.getId();
 
-        if (savedPlace.getId() == null) throw new RuntimeException();
-
-//        Long id = savedPlace.getId();
-//        Long userSeq = savedPlace.getLandlordId();
-//        String thumbnailName;
-//        if (thumbnail == null || thumbnail.isEmpty()) {
-//            savedPlace.setThumbnail(null);
-//        } else {
-//            String extension = "";
-//            String originalFilename = thumbnail.getOriginalFilename();
-//            extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-//
-//            thumbnailName = String.format("place_%d_%d_thumbnail.%s", id, userSeq, extension);
-//            saveFile(thumbnail, "place_thumbnail", thumbnailName); // 파일 저장
-//            savedPlace.setThumbnail(thumbnailName);
-//        }
-//        RentalLand saved = rentalPlaceJpaRepository.save(savedPlace);
+        s3FileService.uploadSingleImage(thumbnail, id, "land");
+        s3FileService.uploadMultipleImages(images, id, "land");
     }
 
     @Transactional
@@ -182,197 +155,17 @@ public class RentalLandService {
         }
     }
 
-//    @Transactional
-//    public void insertRentalPlaceWithImages(
-//            RentalPlaceTO to,
-//            MultipartFile thumbnail,
-//            List<MultipartFile> images){
-//        // RentalPlace 저장
-//        ModelMapper mapper = new ModelMapper();
-//        RentalLand rentalLand = mapper.map(to, RentalLand.class);
-//        rentalLand.setStatus(ActivateStatus.ACTIVE);
-//
-//        RentalLand savedPlace = rentalPlaceJpaRepository.save(rentalLand);
-//        Long id = savedPlace.getId();
-//        Long userSeq = savedPlace.getLandlordId();
-
-//        // 썸네일 파일 저장
-//        String thumbnailName;
-//        if (thumbnail == null || thumbnail.isEmpty()) {
-//            thumbnailName = "thumbnail_default.png";
-//            savedPlace.setThumbnail(thumbnailName);
-//        } else {
-//            String extension = "";
-//            String originalFilename = thumbnail.getOriginalFilename();
-//            extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-//
-//            thumbnailName = String.format("place_%d_%d_thumbnail.%s", id, userSeq, extension);
-//            saveFile(thumbnail, "place_thumbnail", thumbnailName); // 파일 저장
-//            savedPlace.setThumbnail(thumbnailName);
-//        }
-//        rentalPlaceJpaRepository.save(savedPlace);
-
-        // 상세 이미지 저장
-//        List<RentalPlaceImageList> lists = new ArrayList<>();
-//        if (!images.isEmpty()) {
-//            for (int i = 0; i < images.size(); i++) {
-//                MultipartFile imageFile = images.get(i);
-//
-//                String extension = "";
-//                String originalFilename = imageFile.getOriginalFilename();
-//                extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-//
-//                String imageName = String.format("place_%d_%d_images_%d.%s", id, userSeq, i + 1, extension);
-//                saveFile(imageFile, "place_detail", imageName);
-//
-//                RentalPlaceImageListId imageListId = new RentalPlaceImageListId();
-//                imageListId.setRentalPlaceSeq(id);
-//                imageListId.setImage(imageName);
-//
-//                RentalPlaceImageList imageList = new RentalPlaceImageList();
-//                imageList.setId(imageListId);
-//                imageList.setRentalPlaceSeq(savedPlace);
-//
-//                lists.add(imageList);
-//            }
-//
-//            rentalPlaceImageListJpaRepository.saveAll(lists);
-//        } else {
-//            // 이미지가 비어있을 때 기본 이미지 추가 / 추가 x 상세 이미지는 무조건 들어와야 됨
-//            String defaultImageName = "thumbnail_default.png";
-//
-//            RentalPlaceImageListId imageListId = new RentalPlaceImageListId();
-//            imageListId.setRentalPlaceSeq(id);
-//            imageListId.setImage(defaultImageName);
-//
-//            RentalPlaceImageList imageList = new RentalPlaceImageList();
-//            imageList.setId(imageListId);
-//            imageList.setRentalPlaceSeq(savedPlace);
-//
-//            lists.add(imageList);
-//        }
-//    }
-
-//    @Transactional
-//    public void updateRentalPlaceImage(Long id, List<MultipartFile> images){
-//        RentalLand savedPlace = rentalPlaceJpaRepository.findById(id).orElseThrow();
-//        Long userSeq = savedPlace.getLandlordId();
-//
-//        // 이미지 데이터 저장
-//        List<RentalPlaceImageList> lists = new ArrayList<>();
-//        if (images == null || images.isEmpty()) {
-//            // 이미지가 없을 때 기본 이미지 추가 -> null로 적용.
-//            String defaultImageName = "thumbnail_default.png";
-//
-//            RentalPlaceImageListId imageListId = new RentalPlaceImageListId();
-//            imageListId.setRentalPlaceSeq(id);
-//            imageListId.setImage(defaultImageName);
-//
-//            RentalPlaceImageList imageList = new RentalPlaceImageList();
-//            imageList.setId(imageListId);
-//            imageList.setRentalPlaceSeq(savedPlace);
-//
-//            lists.add(imageList);
-//        } else {
-//            // 이미지가 있을 때 처리
-//            for (int i = 0; i < images.size(); i++) {
-//
-//                String imageName = String.format("rental_%d_%d_images_%d.png", id, userSeq, i + 1);
-//
-//                saveFile(images.get(i), "place_detail", imageName);
-//
-//                RentalPlaceImageListId imageListId = new RentalPlaceImageListId();
-//                imageListId.setRentalPlaceSeq(id);
-//                imageListId.setImage(imageName);
-//
-//                RentalPlaceImageList imageList = new RentalPlaceImageList();
-//                imageList.setId(imageListId);
-//                imageList.setRentalPlaceSeq(savedPlace);
-//
-//                lists.add(imageList);
-//            }
-//        }
-//
-//        rentalPlaceImageListJpaRepository.saveAll(lists);
-//    }
+    @Transactional
+    public void deleteRentalImageById(Long id){
+        s3FileService.deleteFiles("land", id);
+    }
 
     @Transactional
     public void deleteRentalPlaceById(Long id){
-        Long userSeq = rentalLandJpaRepository.findUserSeqById(id);
 
-//        deleteThumbnailFile(id, userSeq);
-//        deleteImageFiles(id, userSeq);
-
-//        placeRequestRepository.deletePlaceRequestsByRentalPlaceSeq(id);
-//        rentalPlaceImageListJpaRepository.deleteRentalPlaceImageBySeq(id);
+        s3FileService.deleteFiles("land", id);
         rentalLandJpaRepository.deleteRentalPlaceById(id);
-
     }
-
-//    @Transactional
-//    public int deleteRentalPlaceImageById(Long id){
-//        int flag=0;
-//        rentalPlaceImageListJpaRepository.deleteRentalPlaceImageBySeq(id);
-//
-//        return flag;
-//    }
-//
-//    private void saveFile(MultipartFile file, String folder, String filename) {
-//        String path = "C:/popupmarket/";
-//        try {
-//            String uploadDir = path + folder + "/";
-//            Path filePath = Paths.get(uploadDir + filename);
-//            Files.createDirectories(filePath.getParent());
-//            Files.write(filePath, file.getBytes());
-//        } catch (IOException e) {
-//            throw new RuntimeException("파일 저장 실패", e);
-//        }
-//    }
-
-//    private void deleteThumbnailFile(Long id, Long userSeq) {
-//        try {
-//            String basePath = "C:/popupmarket/";
-//            String thumbnailPath = String.format(basePath + "place_thumbnail/place_%d_%d_thumbnail.png", id, userSeq);
-//            File thumbnailFile = new File(thumbnailPath);
-//
-//            if (thumbnailFile.exists()) {
-//                if (thumbnailFile.delete()) {
-//                    System.out.println("썸네일 파일 삭제 성공: " + thumbnailPath);
-//                } else {
-//                    System.err.println("썸네일 파일 삭제 실패: " + thumbnailPath);
-//                }
-//            } else {
-//                System.out.println("삭제할 썸네일 파일이 존재하지 않음: " + thumbnailPath);
-//            }
-//        } catch (Exception e) {
-//            System.err.println("썸네일 파일 삭제 중 오류 발생: " + e.getMessage());
-//        }
-//    }
-//    private void deleteImageFiles(Long id, Long userSeq) {
-//        try {
-//            String basePath = "C:/popupmarket/";
-//            String imagePathPattern = String.format(basePath + "place_detail/place_%d_%d_images_", id, userSeq);
-//
-//            int index = 1;
-//            while (true) {
-//                String imagePath = String.format(imagePathPattern + "%d.png", index);
-//                File imageFile = new File(imagePath);
-//
-//                if (imageFile.exists()) {
-//                    if (imageFile.delete()) {
-//                        System.out.println("상세 이미지 파일 삭제 성공: " + imagePath);
-//                    } else {
-//                        System.err.println("상세 이미지 파일 삭제 실패: " + imagePath);
-//                    }
-//                } else {
-//                    System.out.println("삭제할 이미지 파일이 더 이상 존재하지 않음 (index: " + index + ")");
-//                    break;
-//                }
-//                index++;
-//            }
-//        } catch (Exception e) {
-//            System.err.println("상세 이미지 파일 삭제 중 오류 발생: " + e.getMessage());
-//        }
-//    }
-
 }
+
+
