@@ -124,7 +124,7 @@ public class PaymentController {
     @Operation(summary = "임대지 예약 리스트 조회")
     public ReservationResponse reservation(@PathVariable Long rentalPlaceSeq) {
         ReservationResponse resp = new ReservationResponse();
-        resp.setRentalLandTitle(rentalLandService.findById(rentalPlaceSeq).getName());
+        resp.setRentalLandTitle(rentalLandService.findById(rentalPlaceSeq).getTitle());
         resp.setReservation(paymentService.getReceiptsByPlaceSeq(rentalPlaceSeq));
 
         return resp;

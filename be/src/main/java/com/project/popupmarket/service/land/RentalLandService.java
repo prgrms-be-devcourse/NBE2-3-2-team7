@@ -1,12 +1,15 @@
 package com.project.popupmarket.service.land;
 
+import com.project.popupmarket.dto.land.RentalLandRespTO;
 import com.project.popupmarket.dto.land.RentalLandTO;
 import com.project.popupmarket.entity.RentalLand;
 import com.project.popupmarket.enums.ActivateStatus;
 import com.project.popupmarket.repository.RentalLandJpaRepository;
+import com.project.popupmarket.service.aws.S3FileService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,15 +22,31 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class RentalLandService {
+    @Autowired
+    private S3FileService s3FileService;
 
     private final RentalLandJpaRepository rentalLandJpaRepository;
 
-    public List<RentalLandTO> findWithLimit() {
+    public List<RentalLandRespTO> findWithLimit() {
         ModelMapper modelMapper = new ModelMapper();
 
         return rentalLandJpaRepository.findWithLimit()
                 .stream()
-                .map(p -> modelMapper.map(p, RentalLandTO.class)).toList();
+                .map(rp -> {
+                    // RentalLandTO 매핑
+                    RentalLandTO rentalLandTO = modelMapper.map(rp, RentalLandTO.class);
+
+                    // 썸네일 URL 생성
+                    String thumbnailFilePath = String.format("/land/%d_thumbnail.png", rp.getId());
+                    String thumbnailUrl = s3FileService.getCloudFrontImageUrl(thumbnailFilePath);
+
+                    // RentalLandRespTO 생성 및 데이터 설정
+                    RentalLandRespTO respTO = new RentalLandRespTO();
+                    respTO.setRentalLand(rentalLandTO);
+                    respTO.setThumbnail(thumbnailUrl); // 썸네일만 포함된 리스트 설정
+                    return respTO;
+                })
+                .toList();
     }
 
     public RentalLandTO findById(Long id) {
@@ -37,11 +56,32 @@ public class RentalLandService {
 
     }
 
+    public RentalLandRespTO getUserWithImages(Long id) {
+        return rentalLandJpaRepository.findById(id)
+                .map(rentalLand -> {
+                    RentalLandTO rentalLandTO = new ModelMapper().map(rentalLand, RentalLandTO.class);
+
+                    String filePath = String.format("land/%d_images_", rentalLand.getId());
+                    String thumbnailFilePath = String.format("/land/%d_thumbnail.png", rentalLandTO.getId());
+                    String thumbnailUrl = s3FileService.getCloudFrontImageUrl(thumbnailFilePath);
+
+                    List<String> imageUrls = s3FileService.getCloudFrontImageListUrl(filePath);
+
+                    RentalLandRespTO response = new RentalLandRespTO();
+                    response.setRentalLand(rentalLandTO);
+                    response.setThumbnail(thumbnailUrl);
+                    response.setImages(imageUrls);
+
+                    return response;
+                })
+                .orElse(null);
+    }
+
 //    public String findPlaceThumbnailById(Long placeSeq) {
 //        return rentalPlaceJpaRepository.findById(placeSeq).get().getThumbnail();
 //    }
 
-    public Page<RentalLandTO> findFilteredWithPagination(
+    public Page<RentalLandRespTO> findFilteredWithPagination(
             Integer minCapacity, Integer maxCapacity, String location,
             BigDecimal minPrice, BigDecimal maxPrice,
             LocalDate startDate, LocalDate endDate,
@@ -49,7 +89,19 @@ public class RentalLandService {
         ModelMapper modelMapper = new ModelMapper();
         return rentalLandJpaRepository
                 .findFilteredWithPagination(minCapacity, maxCapacity, location, minPrice, maxPrice, startDate, endDate, sorting, pageable)
-                .map(rp -> modelMapper.map(rp, RentalLandTO.class));
+                .map(rp -> {
+                    RentalLandTO rentalLandTO = modelMapper.map(rp, RentalLandTO.class);
+
+                    String thumbnailFilePath = String.format("land/%d_thumbnail.png", rp.getId());
+
+                    String thumbnailUrl = s3FileService.getCloudFrontImageUrl(thumbnailFilePath);
+
+                    RentalLandRespTO respTO = new RentalLandRespTO();
+                    respTO.setRentalLand(rentalLandTO);
+                    respTO.setThumbnail(thumbnailUrl);
+
+                    return respTO;
+                });
     }
 
 //    public List<RentalPlaceImageTO> findRentalPlaceImageList (Long id) {
@@ -67,12 +119,28 @@ public class RentalLandService {
 //        return toList;
 //    }
 
-    public List<RentalLandTO> findRentalPlacesByUserId (Long userSeq) {
+    public List<RentalLandRespTO> findRentalPlacesByUserId(Long userSeq) {
         ModelMapper modelMapper = new ModelMapper();
 
         return rentalLandJpaRepository
                 .findRentalPlacesByUserId(userSeq)
-                .stream().map(rp -> modelMapper.map(rp, RentalLandTO.class))
+                .stream()
+                .map(rp -> {
+                    RentalLandTO rentalLandTO = modelMapper.map(rp, RentalLandTO.class);
+
+                    String filePath = String.format("land/%d_images_", rentalLandTO.getId());
+                    String thumbnailFilePath = String.format("/land/%d_thumbnail.png", rentalLandTO.getId());
+                    String thumbnailUrl = s3FileService.getCloudFrontImageUrl(thumbnailFilePath);
+
+//                    List<String> imageUrls = s3FileService.getCloudFrontImageListUrl(filePath);
+
+                    RentalLandRespTO respTO = new RentalLandRespTO();
+                    respTO.setRentalLand(rentalLandTO);
+                    respTO.setThumbnail(thumbnailUrl);
+//                    respTO.setImages(imageUrls);
+
+                    return respTO;
+                })
                 .toList();
     }
 

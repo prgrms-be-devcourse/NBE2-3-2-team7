@@ -30,11 +30,10 @@ public class ImageController {
     public ResponseEntity<String> uploadSingleImage(
             @RequestParam("image") MultipartFile image,
             @RequestParam("category") String category,
-            @RequestParam("userId") Long userId,
             @RequestParam("categoryId") Long categoryId
     ) {
         try {
-            String imageUrl = s3FileService.uploadSingleImage(image, userId, categoryId, category);
+            String imageUrl = s3FileService.uploadSingleImage(image, categoryId, category);
             return ResponseEntity.ok(imageUrl);
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Image upload failed: " + e.getMessage());
@@ -45,11 +44,10 @@ public class ImageController {
     public ResponseEntity<List<String>> uploadMultipleImages(
             @RequestParam("images") List<MultipartFile> images,
             @RequestParam("category") String category,
-            @RequestParam("userId") Long userId,
             @RequestParam("categoryId") Long categoryId
     ) {
         try {
-            List<String> imageUrls = s3FileService.uploadMultipleImages(images, userId, categoryId, category);
+            List<String> imageUrls = s3FileService.uploadMultipleImages(images, categoryId, category);
             return ResponseEntity.ok(imageUrls);
         } catch (IOException e) {
             return ResponseEntity.status(500).body(List.of("Image upload failed: " + e.getMessage()));
@@ -70,7 +68,7 @@ public class ImageController {
             @RequestParam("categoryId") Long categoryId
     ) {
         try {
-            String imageUrl = s3FileService.getSingleImage(category, userId, categoryId);
+            String imageUrl = s3FileService.getSingleImage(category, categoryId);
             return ResponseEntity.ok(imageUrl);
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(e.getMessage());
@@ -80,30 +78,27 @@ public class ImageController {
     @GetMapping("/images/multiple")
     public ResponseEntity<List<String>> getMultipleImages(
             @RequestParam("category") String category,
-            @RequestParam("userId") Long userId,
             @RequestParam("categoryId") Long categoryId
     ) {
-        List<String> imageUrls = s3FileService.getMultipleImages(category, userId, categoryId);
+        List<String> imageUrls = s3FileService.getMultipleImages(category, categoryId);
         if (imageUrls.isEmpty()) {
-            return ResponseEntity.status(404).body(List.of("No multiple images found for userId: " + userId));
+            return ResponseEntity.status(404).body(List.of("No multiple images found for categoryId: " + categoryId));
         }
         return ResponseEntity.ok(imageUrls);
     }
 
-        @DeleteMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<List<String>> deleteFiles(
             @RequestParam("category") String category,
-            @RequestParam("userId") Long userId,
             @RequestParam("categoryId") Long categoryId
     ) {
-        List<String> deletedKeys = s3FileService.deleteFiles(category, userId, categoryId);
+        List<String> deletedKeys = s3FileService.deleteFiles(category, categoryId);
 
         if (deletedKeys.isEmpty()) {
-            return ResponseEntity.status(404).body(List.of("No files found for category: " + category + " and userId: " + userId));
+            return ResponseEntity.status(404).body(List.of("No files found for category: " + category + " and categoryId: " + categoryId));
         }
 
         return ResponseEntity.ok(deletedKeys);
     }
-
 
 }

@@ -31,7 +31,7 @@ public class RentalPlaceController {
 
     @GetMapping("/rental/list")
     @Operation(summary = "조건에 해당하는 임대지 리스트")
-    public Page<RentalLandTO> rentalListPagination( // 임대 리스트 페이지 9개 + 필터링 + 페이지네이션
+    public Page<RentalLandRespTO> rentalListPagination( // 임대 리스트 페이지 9개 + 필터링 + 페이지네이션
                                                     @RequestParam(required = false) Integer minCapacity, // 최소 면적 기본값 0
                                                     @RequestParam(required = false) Integer maxCapacity, // 최소 면적 기본값 100
                                                     @RequestParam(required = false) String location,     // 위치, 기본값 null
@@ -42,7 +42,6 @@ public class RentalPlaceController {
                                                     @RequestParam(required = false) String sorting,      // 정렬 기준
                                                     @RequestParam(defaultValue = "0") int page
     ) {
-        //Query Parameter -> DTO?
 //        GET /list?page=0 -> 초기 값
 //        GET /list?minArea=30&maxArea=70&location=서울&minPrice=100000&maxPrice=9000000&page=0
         //Capacity, Price, Name, Thumbnail
@@ -59,7 +58,7 @@ public class RentalPlaceController {
 
     @GetMapping("/rental/user")
     @Operation(summary = "사용자 임대지 리스트")
-    public List<RentalLandTO> userRentalList() {
+    public List<RentalLandRespTO> userRentalList() {
         Long userSeq = userContextUtil.getUserId();
 
         return rentalLandService.findRentalPlacesByUserId(userSeq);
@@ -97,8 +96,7 @@ public class RentalPlaceController {
     public ResponseEntity<RentalLandRespTO> rentalPlaceById(
             @PathVariable Long id
     ) {
-        RentalLandTO to = rentalLandService.findById(id);
-//        List<RentalPlaceImageTO> imageTo = rentalLandService.findRentalPlaceImageList(id);
+        RentalLandRespTO to = rentalLandService.getUserWithImages(id);
 
         if (to == null) {
             return ResponseEntity.status(404).build();
