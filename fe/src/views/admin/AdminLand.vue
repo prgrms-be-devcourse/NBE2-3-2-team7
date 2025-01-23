@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import DeleteModal from "../../components/AdminHome/land/DeleteModal.vue";
-import BasePaging from "../../components/ItemList/BasePaging.vue";
+import BasePaging from "../../components/common/BasePaging.vue";
 import DetailRow from "../../components/AdminHome/land/DetailRow.vue";
 
 const isDeleteModalOpen = ref(false);

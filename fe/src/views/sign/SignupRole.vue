@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import TermsForm from '../../components/SignUp/TermsForm.vue';
-import PrivacyForm from '../../components/SignUp/PrivacyForm.vue';
-import { useSignupStore } from '../../store/signup';
+import TermsForm from '@/components/policy/TermsForm.vue';
+import PrivacyForm from '@/components/policy/PrivacyForm.vue';
+import { useSignupStore } from '@/store/signup';
 
 const router = useRouter();
 

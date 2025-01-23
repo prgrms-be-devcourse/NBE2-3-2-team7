@@ -1,9 +1,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { initSingleFlatpickr } from '../../utils/init.plugin';
-import { useSignupStore } from '../../store/signup';
-import { validateBusinessman } from '../../services/businessman.api'
+import { initSingleFlatpickr } from '@/utils/init.plugin';
+import { useSignupStore } from '@/store/signup';
+import { validateBusinessman } from '@/services/businessman.api'
 
 const router = useRouter();
 

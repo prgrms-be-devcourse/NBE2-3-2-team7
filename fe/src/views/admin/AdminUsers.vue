@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 import DeleteModal from "../../components/AdminHome/users/DeleteModal.vue";
-import BasePaging from "../../components/ItemList/BasePaging.vue";
+import BasePaging from "../../components/common/BasePaging.vue";
 import AddModal from "../../components/AdminHome/users/AddModal.vue";
 import DetailRow from "../../components/AdminHome/users/DetailRow.vue";
 
