@@ -114,27 +114,29 @@ const role = user[0].role;  // role 값 설정 (customer 또는 landlord)
 							<!-- 제목과 버튼을 Flexbox로 정렬 -->
 							<div class="flex justify-between items-center pl-8 pr-4 mt-1">
 								<h3 class="text-lg">
-									{{ role === 'customer' ? '/' : '수익 통계 대시보드' }}
+									{{ role === 'customer' ? '/' : '최근 일주일간의 수익 현황' }}
 								</h3>
 								<!-- 추후 수정 -->
-								<router-link :to=" role === 'customer' ? '/user/payment' : '/user'" 
+								<router-link :to=" role === 'customer' ? '/user/payment' : '/user/stats'"
 									class="text-black font-bold p-1 hover:text-gray-700 transition-colors rounded-md hover:bg-gray-100">
 									<button id="view-all-btn" type="button">
 										전체 보기
 									</button>
 								</router-link>
 							</div>
-							<div id="payment-box" class="grid grid-cols-1 gap-2" style="max-width: 100%;">
 								<template v-if="role === 'customer'">
+                  <div id="payment-box" class="grid grid-cols-1 gap-2" style="max-width: 100%;">
 									<PaymentCard v-for="(item, index) in payment" :key="index" :land="item.land"
 										:link="item.link" :date="item.date" :amount="item.amount"
 										:status="item.status" />
+                  </div>
 								</template>
 								<template v-else>
-									<LandAnalytics />
+                  <main class="flex flex-col items-center w-full px-4 py-6 bg-gray-50">
+                    <LandAnalytics/>
+                  </main>
 								</template>
 							</div>
-						</div>
 					</section>
 				</form>
 			</div>
