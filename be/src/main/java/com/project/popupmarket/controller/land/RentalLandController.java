@@ -2,11 +2,10 @@ package com.project.popupmarket.controller.land;
 
 import com.project.popupmarket.dto.land.RentalLandRespTO;
 import com.project.popupmarket.dto.land.RentalLandTO;
-import com.project.popupmarket.exception.custom.ResourceNotFoundException;
-import com.project.popupmarket.exception.custom.S3Exception;
 import com.project.popupmarket.service.land.RentalLandService;
 import com.project.popupmarket.util.UserContextUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,16 +24,15 @@ import java.util.List;
 
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
-public class RentalPlaceController {
-    @Autowired
-    private RentalLandService rentalLandService;
-    @Autowired
-    private UserContextUtil userContextUtil;
+public class RentalLandController {
+    private final RentalLandService rentalLandService;
+    private final UserContextUtil userContextUtil;
 
     // [ READ ] - 1
     // : 조건에 해당하는 팝업들 미리보기
-    @GetMapping("/rental/list")
+    @GetMapping("/land/list")
     @Operation(summary = "조건에 해당하는 임대지 리스트")
     public Page<RentalLandRespTO> rentalListPagination( // 임대 리스트 페이지 9개 + 필터링 + 페이지네이션
             @RequestParam(required = false) Integer minCapacity, // 최소 면적 기본값 0
@@ -63,7 +61,7 @@ public class RentalPlaceController {
 
     // [ READ ] - 2
     // 특정 번호에 해당하는 임대지 상세 정보
-    @GetMapping("/rental/{id}")
+    @GetMapping("/land/{id}")
     @Operation(summary = "개별 임대지 조회")
     public ResponseEntity<RentalLandRespTO> rentalPlaceById(
             @PathVariable Long id
@@ -73,7 +71,7 @@ public class RentalPlaceController {
     }
 
     // [ Read ] - 3 : 관리 중인 임대지 목록
-    @GetMapping("/rental/user")
+    @GetMapping("/land/user")
     @Operation(summary = "사용자 임대지 리스트")
     public List<RentalLandRespTO> userRentalList() {
         Long userSeq = userContextUtil.getUserId();
@@ -83,7 +81,7 @@ public class RentalPlaceController {
 
     // [ CREATE ]
     @Operation(summary = "임대지 추가")
-    @PostMapping(value = "/rental", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/land", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> insertRentalPlace( // 임대페이지 데이터 create
             @RequestPart("rentalPlace") RentalLandTO rentalPlaceTO,
             @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
@@ -98,7 +96,7 @@ public class RentalPlaceController {
     }
 
     // [ Update ] - 1 : 개별 임대지 수정
-    @PutMapping("/rental/{id}")
+    @PutMapping("/land/{id}")
     @Operation(summary = "개별 임대지 수정")
     public ResponseEntity<Void> updateRentalPlace(
             @PathVariable("id") Long id,
@@ -117,7 +115,7 @@ public class RentalPlaceController {
     }
 
     // [ Update ] - 2 : 임대지 상태 변경
-    @PatchMapping("/rental/{id}")
+    @PatchMapping("/land/{id}")
     @Operation(summary = "임대지 상태 변경 -> [ACTIVE, INACTIVE]")
     public ResponseEntity<Void> updateRentalStatus(
             @PathVariable("id") Long id,
@@ -129,7 +127,7 @@ public class RentalPlaceController {
     }
 
     // [ Delete ]
-    @DeleteMapping("/rental/{id}")
+    @DeleteMapping("/land/{id}")
     @Operation(summary = "개별 임대지 삭제")
     public ResponseEntity<Void> deleteRentalPlace(
             @PathVariable Long id
