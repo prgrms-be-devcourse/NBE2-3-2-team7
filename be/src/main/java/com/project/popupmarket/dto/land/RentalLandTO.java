@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -16,37 +17,34 @@ import java.util.Set;
 @Setter
 @ToString
 public class RentalLandTO {
-    private Long id;
-    private Long landlordId;
-    private String thumbnail;
-    private BigDecimal price;
-    private String zipcode;
-    private String address;
-    private String addrDetail;
-    private String description;
-    private String infra;
-    private String name;
-    private Integer area;
-    private String ageGroup;
-    private Instant registeredAt;
-    private String status;
+    private Long id;                       // ID
+    private Long landlordId;               // 임대인 ID
+    private BigDecimal price;              // 가격
+    private String zipcode;                // 우편번호 (5자 제한)
+    private String address;                // 주소
+    private String addrDetail;             // 상세 주소
+    private String description;            // 설명
+    private String infra;                  // 인프라 (옵션)
+    private String title;                  // 제목
+    private Integer area;                  // 면적
+    private String ageGroup;               // 연령대 (Enum -> String)
+    private LocalDateTime registeredAt;    // 등록 일자 (엔티티와 동일하게 LocalDateTime으로 변경)
+    private String status;                 // 활성화 상태
 
-    private Set<String> rentalPlaceImages;
-
-    public RentalLandTO(Long id, Long landlordId, String thumbnail, String zipcode,
+    // 생성자
+    public RentalLandTO(Long id, Long landlordId, String zipcode,
                         BigDecimal price, String address, String addrDetail, String description,
-                        String infra, String name, Integer area, String ageGroup,
-                        Instant registeredAt, String status) {
+                        String infra, String title, Integer area, String ageGroup,
+                        LocalDateTime registeredAt, String status) {
         this.id = id;
         this.landlordId = landlordId;
-        this.thumbnail = thumbnail;
         this.zipcode = zipcode;
         this.price = price;
         this.address = address;
         this.addrDetail = addrDetail;
         this.description = description;
         this.infra = infra;
-        this.name = name;
+        this.title = title;
         this.area = area;
         this.ageGroup = ageGroup;
         this.registeredAt = registeredAt;
