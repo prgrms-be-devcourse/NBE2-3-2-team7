@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>POP-UP Market</title>
+	<!-- Tailwind CSS -->
+	<link rel="stylesheet" href="/css/output.css">
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<!-- Flatpickr JS -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<!-- noUiSlider CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+	<!-- noUiSlider JS -->
+	<script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+	<!-- Kakao SDK JS -->
+	<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" integrity="sha384-DKYJZ8NLiK8MN4/C5P2dtSmLQ4KwPaoqAfyA/DfmEc1VDxu4yyC7wy6K1Hs90nka" crossorigin="anonymous"></script>
+	<!-- Common JS -->
+	<script src="/scripts/common.js" defer></script>
+	<!-- Login JS -->
+	<script src="/scripts/login.js"></script>
+	<style>
+		.noUi-horizontal .noUi-handle {
+			width: 24px;
+			height: 20px;
+			right: -12px;
+			top: -2px;
+		}
+	</style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+<header th:replace="~{fragments/header.html :: header}"></header>
+
+<main class="flex-grow flex flex-col items-center">
+	<section class="flex flex-grow mt-10 w-full px-4">
+		<div class="flex mx-auto max-w-7xl flex-col items-center justify-center">
+			<div class="min-w-96">
+				<div class="">
+					<img class="mx-auto h-36 w-auto" src="/images/logo.png" alt="">
+				</div>
+				<div class="mt-10 ">
+					<form class="space-y-6">
+						<div class="h-full">
+							<label for="email" class="block text-sm/6 font-medium text-gray-900">이메일</label>
+							<div class="mt-2">
+								<input type="email" name="email" id="email" autocomplete="email" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-[#3FB8AF] sm:text-sm/6">
+							</div>
+						</div>
+						<div>
+							<label for="password" class="block text-sm/6 font-medium text-gray-900">비밀번호</label>
+							<div class="mt-2">
+								<input type="password" name="password" id="password" autocomplete="current-password" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-[#3FB8AF] sm:text-sm/6">
+							</div>
+						</div>
+						<div>
+							<button type="submit" class="flex w-full justify-center rounded-md bg-[#3FB8AF] px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-[#2c817c]">로그인</button>
+						</div>
+						<div class="flex justify-center w-full bg-[#FEE500] rounded-md">
+							<a id="kakao-login-btn" href="javascript:loginWithKakao()">
+								<img src="/images/kakao_login/ko/kakao_login_large_narrow.png" width="200" alt="카카오 로그인 버튼" />
+							</a>
+						</div>
+					</form>
+					<p class="mt-5 text-center flex justify-start text-sm/6 text-gray-500">
+						<a href="/register" class="font-semibold text-black hover:text-[#3FB8AF]">회원가입</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from 'vue';
 import { useRouter, RouterLink } from 'vue-router';
-import { useSignupStore } from '../../store/signup';
+import { useSignupStore } from '@/store/signup';
 
 const router = useRouter();
 

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>POP-UP Market</title>
+	<!-- Tailwind CSS -->
+	<link rel="stylesheet" href="/css/output.css">
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<!-- Flatpickr JS -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<!-- noUiSlider CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+	<!-- noUiSlider JS -->
+	<script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+	<!-- Common JS -->
+	<script src="/scripts/common.js" defer></script>
+	<!-- My Page JS -->
+	<script src="/scripts/my.page.js" defer></script>
+	<style>
+		.noUi-horizontal .noUi-handle {
+			width: 24px;
+			height: 20px;
+			right: -12px;
+			top: -2px;
+		}
+	</style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+	<header th:replace="~{fragments/header.html :: header}"></header>
+	<main class="flex-grow flex flex-col items-center">
+		<nav class="bg-white sm:bg-[#3FB8AF] w-full flex justify-center">
+			<div class="sm:my-0 sm:max-w-7xl min-w-full space-x-0 space-y-0 sm:space-x-1 sm:pt-10 sm:px-4 justify-center items-center flex flex-col sm:flex-row sm:border-0 border-b overflow-hidden">
+				<a href="/mypage" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-white bg-[#3FB8AF] sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-gray-400 sm:text-gray-700 text-white">회원 정보</a>
+				<a href="/mypage/rental" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-gray-300 sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-white sm:border-gray-400 hover:bg-gray-300 sm:transform sm:translate-y-3 text-gray-700">임대지 관리</a>
+				<a href="/mypage/popup" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-gray-300 sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-white sm:border-gray-400 hover:bg-gray-300 sm:transform sm:translate-y-3 text-gray-700">팝업 관리</a>
+				<a href="/mypage/receipt" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-gray-300 sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-white sm:border-gray-400 hover:bg-gray-300 sm:transform sm:translate-y-3 text-gray-700">결제 내역</a>
+			</div>
+		</nav>
+		<section class="flex mt-4 w-full bg-white justify-center">
+			<div class="bg-white max-w-2xl w-full">
+				<form id="edit-user-form" class="min-w-5xl space-y-12 p-8 flex-col" enctype="multipart/form-data">
+					<div class="flex sm:flex-row flex-col justify-between sm:space-y-0 space-y-8">
+						<div class="space-y-4 flex flex-col justify-center items-center">
+							<img id="profile-image" src="" class="rounded-full w-40 h-40 border border-gray-300 object-contain bg-gray-300" alt="">
+							<input type="file" id="profile-real-upload" accept="image/gif, image/png, image/jpg" class="hidden">
+							<button id="profile-custom-upload" onclick="uploadImage()" class="p-2 bg-[#3FB8AF] text-white font-bold rounded-lg transition-colors hover:bg-[#2c817c]" type="button">이미지 변경하기</button>
+							<span class="text-xs font-bold">2MB 이하로 업로드 해주세요.</span>
+						</div>
+						<div class="flex space-x-4 justify-center">
+							<div class="flex flex-col space-y-4">
+								<span class="h-9 block p-1 font-bold text-gray-700 flex-shrink-0">이메일</span>
+								<span class="h-9 block p-1 font-bold text-gray-700 flex-shrink-0">비밀번호</span>
+								<span class="h-9 block p-1 font-bold text-gray-700 flex-shrink-0">비밀번호 확인</span>
+								<span class="h-9 block p-1 font-bold text-gray-700 flex-shrink-0">전화번호</span>
+								<span class="h-9 block p-1 font-bold text-gray-700 flex-shrink-0">이름</span>
+								<span class="h-9 block p-1 font-bold text-gray-700 flex-shrink-0">브랜드</span>
+							</div>
+							<div class="flex flex-col space-y-4">
+								<span class="h-9 p-1">admin@test.com</span>
+								<label for="password" class="hidden"></label>
+								<input type="password" id="password" class="border p-1 h-9 border-gray-300 focus:outline-[#3FB8AF]" autocomplete="current-password" required>
+								<label for="password-check" class="hidden"></label>
+								<input type="password" id="password-check" class="border p-1 h-9 border-gray-300 focus:outline-[#3FB8AF]" required>
+								<span class="h-9 p-1">010-1234-5678</span>
+								<span class="h-9 p-1">홍길동</span>
+								<label for="brand" class="hidden"></label>
+								<input type="text" id="brand" class="border p-1 h-9 border-gray-300 focus:outline-[#3FB8AF]" required>
+							</div>
+						</div>
+					</div>
+					<div class="flex justify-between w-full">
+						<button class="text-red-500 font-bold p-2 hover:text-red-700 transition-colors">회원 탈퇴</button>
+						<button class="text-white bg-[#3FB8AF] hover:bg-[#2c817c] p-2 rounded-md transition-colors font-bold">정보 수정</button>
+					</div>
+				</form>
+			</div>
+		</section>
+	</main>
+	<footer th:replace="~{fragments/footer.html :: footer}"></footer>
+</body>
+
+</html>

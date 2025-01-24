@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useSignupStore } from '../../store/signup';
-import defaultProfile from '../../assets/images/default/default_profile.png';
+import { useSignupStore } from '@/store/signup';
+import defaultProfile from '@/assets/images/default/default_profile.png';
 
 const router = useRouter();
 

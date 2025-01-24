@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>POP-UP Market</title>
+	<!-- Tailwind CSS -->
+	<link rel="stylesheet" href="/css/output.css">
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<!-- Flatpickr JS -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<!-- noUiSlider CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+	<!-- noUiSlider JS -->
+	<script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+	<!-- Common JS -->
+	<script src="/scripts/common.js" defer></script>
+	<!-- My Receipt JS -->
+	<script src="/scripts/my.receipt.js"></script>
+	<style>
+		.noUi-horizontal .noUi-handle {
+			width: 24px;
+			height: 20px;
+			right: -12px;
+			top: -2px;
+		}
+	</style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+	<header th:replace="~{fragments/header.html :: header}"></header>
+	<main class="flex-grow flex flex-col items-center">
+		<nav class="bg-white sm:bg-[#3FB8AF] w-full flex justify-center">
+			<div class="sm:my-0 sm:max-w-7xl min-w-full space-x-0 space-y-0 sm:space-x-1 sm:pt-10 sm:px-4 justify-center items-center flex flex-col sm:flex-row sm:border-0 border-b overflow-hidden">
+				<a href="/mypage" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-gray-300 sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-white sm:border-gray-400 hover:bg-gray-300 sm:transform sm:translate-y-3 text-gray-700">회원 정보</a>
+				<a href="/mypage/rental" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-gray-300 sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-white sm:border-gray-400 hover:bg-gray-300 sm:transform sm:translate-y-3 text-gray-700">임대지 관리</a>
+				<a href="/mypage/popup" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-gray-300 sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-white sm:border-gray-400 hover:bg-gray-300 sm:transform sm:translate-y-3 text-gray-700">팝업 관리</a>
+				<a href="/mypage/receipt" class="text-center font-semibold py-3 w-full sm:w-32 sm:bg-white bg-[#3FB8AF] sm:rounded-t-2xl sm:border-b-0 sm:border-t sm:border-x border-gray-400 sm:text-gray-700 text-white">결제 내역</a>
+			</div>
+		</nav>
+		<section class="mt-4 w-full px-4">
+			<div class="max-w-3xl mx-auto">
+				<div class="flex justify-end pb-2 border-b border-gray-300">
+					<span class="font-bold p-2">결제 내역</span>
+				</div>
+				<div class="p-4 space-y-4">
+					<div class="p-4 justify-between space-y-2 bg-white flex  flex-col border border-gray-300 rounded-lg">
+						<div class="flex justify-between">
+							<span>예약번호 <span>1234</span></span>
+							<span class="font-bold text-sm">결제 대기</span>
+						</div>
+						<div class="flex sm:items-center sm:justify-between flex-col sm:flex-row">
+							<span class="font-bold text-xl sm:mt-0 mt-2">임대지 이름</span>
+							<span class="font-bold text-sm sm:mt-0 mt-4">100,000원 / 일</span>
+						</div>
+						<div class="flex justify-between flex-col-reverse sm:flex-row">
+							<span class="font-bold text-lg mt-2 sm:mt-0">2024.12.01 ~ 2024.12.05 (5일)</span>
+							<span class="font-bold text-lg">총 금액 500,000원</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+	<footer th:replace="~{fragments/footer.html :: footer}"></footer>
+</body>
+
+</html>

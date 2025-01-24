@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>POP-UP Market</title>
+	<!-- Tailwind CSS -->
+	<link rel="stylesheet" href="/css/output.css">
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<!-- Flatpickr JS -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<!-- noUiSlider CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.css">
+	<!-- noUiSlider JS -->
+	<script src="https://cdn.jsdelivr.net/npm/nouislider/distribute/nouislider.min.js"></script>
+	<!-- Common JS -->
+	<script src="/scripts/common.js" defer></script>
+	<!-- Register JS -->
+	<script src="/scripts/register.js"></script>
+	<style>
+		.noUi-horizontal .noUi-handle {
+			width: 24px;
+			height: 20px;
+			right: -12px;
+			top: -2px;
+		}
+	</style>
+</head>
+
+<body class="flex flex-col min-h-screen">
+	<header th:replace="~{fragments/header.html :: header}"></header>
+	<main class="flex-grow flex flex-col items-center">
+		<section class="flex flex-grow mt-10 w-full px-4">
+			<div class="flex mx-auto max-w-7xl flex-col items-center justify-start">
+				<div class="min-w-96">
+					<p class="font-bold text-2xl">팝업마켓 회원가입</p>
+					<div class="mt-10">
+						<form class="space-y-4">
+							<div>
+								<label for="email" class="block text-sm/6 font-medium text-gray-900">이메일</label>
+								<div class="mt-2">
+									<input type="email" name="email" id="email" autocomplete="email" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-[#3FB8AF] sm:text-sm/6">
+								</div>
+							</div>
+							<div class="space-y-2">
+								<label for="password" class="block text-sm/6 font-medium text-gray-900">비밀번호</label>
+								<div class="mt-2">
+									<input type="password" name="password" id="password" autocomplete="current-password" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-[#3FB8AF] sm:text-sm/6">
+								</div>
+								<label for="password-check" class="block text-sm/6 font-medium text-gray-900">비밀번호 확인</label>
+								<div class="mt-2">
+									<input type="password" name="password" id="password-check" autocomplete="current-password" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-[#3FB8AF] sm:text-sm/6">
+								</div>
+							</div>
+							<div>
+								<label for="name" class="block text-sm/6 font-medium text-gray-900">이름</label>
+								<div class="mt-2">
+									<input type="text" name="name" id="name" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-[#3FB8AF] sm:text-sm/6">
+								</div>
+							</div>
+							<div>
+								<label for="brand" class="block text-sm/6 font-medium text-gray-900">브랜드명</label>
+								<div class="mt-2">
+									<input type="text" name="brand" id="brand" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-[#3FB8AF] sm:text-sm/6">
+								</div>
+							</div>
+							<div>
+								<label for="tel" class="block text-sm/6 font-medium text-gray-900">전화번호</label>
+								<div class="mt-2">
+									<input type="text" name="tel" id="tel" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-[#3FB8AF] sm:text-sm/6">
+								</div>
+							</div>
+							<div class="space-y-4">
+								<div class="mt-10">
+									<input type="checkbox" id="service-check">
+									<label for="service-check">
+										팝업마켓의 <span class="text-[#3FB8AF] font-bold hover:text-[#2c817c] transition-colors">이용약관</span>과 <span class="text-[#3FB8AF] font-bold hover:text-[#2c817c] transition-colors">개인정보 보호정책</span>에 동의합니다
+									</label>
+								</div>
+								<div>
+									<button type="submit" class="flex w-full justify-center rounded-md bg-[#3FB8AF] px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-[#2c817c]">회원가입</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+	<footer th:replace="~{fragments/footer.html :: footer}"></footer>
+</body>
+
+</html>
