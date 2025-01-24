@@ -2,11 +2,9 @@ package com.project.popupmarket.config;
 
 import com.project.popupmarket.config.jwt.TokenAuthenticationFilter;
 import com.project.popupmarket.config.jwt.TokenProvider;
-import com.project.popupmarket.repository.JwtTokenRepository;
 import com.project.popupmarket.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.project.popupmarket.service.oauth.OAuth2UserCustomService;
 import com.project.popupmarket.service.user.UserDetailService;
-import com.project.popupmarket.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,9 +30,7 @@ public class WebOAuthSecurityConfig {
 
     private final OAuth2UserCustomService oAuth2UserCustomService;
     private final TokenProvider tokenProvider;
-    private final JwtTokenRepository jwtTokenRepository;
     private final UserDetailService userDetailService;
-    private final UserService userService;
 
     // WebSecurityCustomizer 빈 등록
     @Bean
@@ -117,11 +113,11 @@ public class WebOAuthSecurityConfig {
     }
 
     // OAuth2 로그인 성공 핸들러 추가
-//    @Bean
-//    public OAuth2SuccessHandler oAuth2SuccessHandler() {
-//        return new OAuth2SuccessHandler(tokenProvider, jwtTokenRepository,
-//                                        oAuth2AuthorizationRequestBasedOnCookieRepository(), userService);
-//    }
+    //    @Bean
+    //    public OAuth2SuccessHandler oAuth2SuccessHandler() {
+    //        return new OAuth2SuccessHandler(tokenProvider, jwtTokenRepository,
+    //                                        oAuth2AuthorizationRequestBasedOnCookieRepository(), userService);
+    //    }
 
     // 폼 로그인 성공 핸들러 추가
     //    @Bean

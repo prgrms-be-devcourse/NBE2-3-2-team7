@@ -26,6 +26,14 @@ spring:
       max-request-size: 50MB     # 요청당 전체 파일 크기
       enabled: true
       location: ${java.io.tmpdir}
+
+  #redis cache
+  cache:
+    type: redis
+    redis:
+      time-to-live: 1209600000 # 14일을 밀리초로
+      cache-null-values: false
+
 server:
   shutdown: graceful
   servlet:
@@ -39,7 +47,9 @@ app:
 jwt:
   issuer: ${JWT_ISSUER}
   secret-key: ${JWT_SECRET_KEY}
+  
 payment:
   toss:
     test_client_api_key: ${TOSS_TEST_CLIENT_KEY}
     test_secret_api_key: ${TOSS_TEST_SECRET_KEY}
+
