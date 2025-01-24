@@ -127,13 +127,8 @@ public class PopupStoreController {
     @DeleteMapping("/popup/{id}")
     @Operation(summary = "개별 팝업 삭제")
     public ResponseEntity<String> deletePopup(@PathVariable long id) {
-        boolean flag = popupStoreService.delete(id);
+        popupStoreService.delete(id);
 
-        if (flag) {
-            return ResponseEntity.ok("팝업이 성공적으로 삭제되었습니다.");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("삭제할 팝업을 찾을 수 없습니다.");
-        }
+        return ResponseEntity.ok("팝업이 성공적으로 삭제되었습니다.");
     }
 }

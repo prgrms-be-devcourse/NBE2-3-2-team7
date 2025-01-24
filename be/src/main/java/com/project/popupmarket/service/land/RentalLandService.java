@@ -37,7 +37,7 @@ public class RentalLandService {
                 .orElseThrow(() -> new ResourceNotFoundException(id + "의 임대지 게시글이 없습니다."));
     }
 
-    // 2 - 1. Read : 특정 번호에 해당하는 임대지 상세 정보
+    // 2 - 1. Read : 조건에 해당하는 팝업들 미리보기
     public Page<RentalLandRespTO> findFilteredWithPagination(
             Integer minCapacity, Integer maxCapacity, String location,
             BigDecimal minPrice, BigDecimal maxPrice,
@@ -89,7 +89,7 @@ public class RentalLandService {
                 .orElseThrow(() -> new ResourceNotFoundException(id + "의 임대지 게시글이 없습니다."));
     }
 
-//  2 - 3. Read :   관리 중인 임대지 목록
+//  2 - 3. Read : 관리 중인 임대지 목록
     public List<RentalLandRespTO> findRentalPlacesByUserId(Long userSeq) {
         ModelMapper modelMapper = new ModelMapper();
 
@@ -133,7 +133,7 @@ public class RentalLandService {
                     // RentalLandRespTO 생성 및 데이터 설정
                     RentalLandRespTO respTO = new RentalLandRespTO();
                     respTO.setRentalLand(rentalLandTO);
-                    respTO.setThumbnail(thumbnailUrl); // 썸네일만 포함된 리스트 설정
+                    respTO.setThumbnail(thumbnailUrl);
                     return respTO;
                 })
                 .toList();
