@@ -1,5 +1,6 @@
 package com.project.popupmarket.controller.recommendation;
 
+import com.project.popupmarket.dto.land.RentalLandRespTO;
 import com.project.popupmarket.dto.recommendation.RecommendItemTO;
 import com.project.popupmarket.dto.recommendation.PlaceDetailRespTO;
 import com.project.popupmarket.dto.land.RentalLandTO;
@@ -52,7 +53,7 @@ public class CompositeController {
     @GetMapping("/land/view/{placeSeq}")
     @Operation(summary = "개별 임대지 조회 (feat. 예약 날짜)")
     public ResponseEntity<PlaceDetailRespTO> getPlaceBySeqWithReservationPeriod(@PathVariable Long placeSeq) {
-        RentalLandTO to = rentalLandService.findById(placeSeq);
+        RentalLandRespTO to = rentalLandService.getUserWithImages(placeSeq);
 //        List<RentalPlaceImageTO> imageTo = rentalLandService.findRentalPlaceImageList(placeSeq);
 
         if (to == null) {

@@ -1,6 +1,7 @@
 package com.project.popupmarket.controller.popup;
 
 import com.project.popupmarket.dto.popup.PopupStoreImgDTO;
+import com.project.popupmarket.dto.popup.PopupStoreRespTO;
 import com.project.popupmarket.dto.popup.PopupStoreTO;
 import com.project.popupmarket.repository.PopupStoreJpaRepository;
 import com.project.popupmarket.service.popup.PopupStoreFileStorageService;
@@ -42,63 +43,25 @@ public class PopupStoreController {
             @RequestPart(value = "thumbnail", required = false) MultipartFile thimg,
             @RequestPart( "images") List<MultipartFile> images
     ) {
-        try {
-            long userSeq = userContextUtil.getUserId();
+        long userSeq = userContextUtil.getUserId();
+        popupStore.setCustomerId(userSeq);
 
-            List<String> imgNames = new ArrayList<>();
-            long popupSeq = popupStoreJpaRepository.findLastSeq();
+        // 팝업, 썸네일, 상세 이미지
+        boolean flag = popupStoreService.insert(popupStore, thimg, images);
 
-            popupStore.setCustomerId(userSeq);
-
-            // 1. 썸네일 이미지 저장
-
-            String thumbNailFileName = null;
-
-            if (thimg != null) {
-                String thPath = "C:/popupmarket/popup_thumbnail";
-
-                // 썸네일 파일 이름 지정
-                String originalFilename = thimg.getOriginalFilename();
-                String ext = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-                thumbNailFileName = "popup_" + (popupSeq + 1) + "_" + (userSeq) + "_thumbnail." + ext;
-
-                popupStoreFileStorageService.storeFile(thimg, thPath, thumbNailFileName);
-            }
-
-            // 2. 상세 이미지 저장
-            String imagesPath = "C:/popupmarket/popup_detail";
-
-            int i = 1;
-            for (MultipartFile img : images) {
-                // 파일 이름 지정
-                String imgOriginalFilename = img.getOriginalFilename();
-                String ext2 = imgOriginalFilename.substring(imgOriginalFilename.lastIndexOf(".") + 1);
-                String imgFileName = "popup_" + (popupSeq + 1) + "_" + (userSeq) + "_images_" + i + "." + ext2;
-
-                // 파일 저장
-                popupStoreFileStorageService.storeFile(img, imagesPath, imgFileName);
-                imgNames.add(imgFileName);
-
-                i ++;
-            }
-            // 3. 팝업, 썸네일, 상세 이미지 DB 삽입
-            boolean flag = popupStoreService.insert(popupStore, thumbNailFileName, imgNames);
-
-            if (flag) {
-                return new ResponseEntity<>("팝업스토어가 성공적으로 추가되었습니다.", HttpStatus.CREATED);
-            } else {
-                return new ResponseEntity<>("팝업스토어 추가에 실패했습니다.", HttpStatus.BAD_REQUEST);
-            }
-        } catch (IOException e) {
-            return new ResponseEntity<>("파일 저장 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        if (flag) {
+            return new ResponseEntity<>("팝업스토어가 성공적으로 추가되었습니다.", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("팝업스토어 추가에 실패했습니다.", HttpStatus.BAD_REQUEST);
         }
+
     }
 
     // [ READ ] - 1
     // : 조건에 해당하는 팝업들 미리보기 - targetLocation, type, targetAgeGroup, startDate ~ endDate
     @GetMapping("/popup/list")
     @Operation(summary = "조건에 해당하는 팝업 리스트")
-    public Page<PopupStoreTO> getPopupByFilter(
+    public Page<PopupStoreRespTO> getPopupByFilter(
             @RequestParam(required = false) String targetLocation,
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String targetAgeGroup,
@@ -116,48 +79,41 @@ public class PopupStoreController {
     // 특정 번호에 해당하는 팝업스토어 상세 정보
     @GetMapping("/popup/{seq}")
     @Operation(summary = "개별 팝업 조회" )
-    public PopupStoreImgDTO getPopupBySeq(@PathVariable Long seq) {
-        PopupStoreTO to = popupStoreService.findBySeq(seq);
-//        List<String> imgLst = popupStoreImageJpaRepository.findById_PopupStoreSeq(seq);
+    public PopupStoreRespTO  getPopupBySeq(@PathVariable Long seq) {
+        PopupStoreRespTO to = popupStoreService.findBySeq(seq);
 
         if (to == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "PopupStore not found with seq: " + seq);
         }
-        return null;
+        return to;
     }
 
     // [ Read ] - 3 : 관리 중인 팝업스토어 목록
     // thumbnail, seq(팝업 기획자의 팝업 데이터), type, title, 입점 요청 몇 회 받았는지
     @GetMapping("/popup/user")
     @Operation(summary = "사용자 팝업 리스트")
-    public List<PopupStoreTO> getPopupByUser() {
+    public List<PopupStoreRespTO> getPopupByUser() {
         Long userSeq = userContextUtil.getUserId();
         return popupStoreService.findByUserSeq(userSeq);
     }
 
     // [ Update ] : 개별 팝업 스토어 수정
-    @PutMapping(value = "/popup/{seq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/popup/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "개별 팝업 수정")
     public ResponseEntity<String> updatePopup(
-            @PathVariable Long seq,
+            @PathVariable Long id,
             @RequestPart(value = "popupStore", required = false) PopupStoreTO popupStore,
             @RequestPart(value = "thumbnail", required = false) MultipartFile thimg,
             @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) {
         try {
+            popupStore.setId(id);
             Long userSeq = userContextUtil.getUserId();
+            popupStore.setCustomerId(userSeq);
 
-            System.out.println(thimg.getOriginalFilename());
-
-            // 1. 팝업스토어 업데이트
-//            int thCount = popupStoreService.updatePopup(seq, userSeq, popupStore, thimg); // updatePopup 메서드는 int 반환
-            // 2. 팝업스토어 이미지 업데이트
-//            int imgsCount = popupStoreService.updatePopupImgs(seq, userSeq, images);
-
-            // 3. 응답 생성
-//            System.out.println("팝업스토어 업데이트 : " + thCount);
-            // imgsCount - 1: 정상
-//            System.out.println("팝업스토어 이미지 업데이트 : " + imgsCount);
+            //delete 추가
+            popupStoreService.deleteImage(id);
+            popupStoreService.insert(popupStore, thimg, images);
 
             return ResponseEntity.ok("팝업 스토어 수정 성공");
         } catch ( Exception e ) {
@@ -168,16 +124,11 @@ public class PopupStoreController {
     // [ Delete ]
     // 팝업 관리 페이지 "/mypage/popup/view?번호={팝업번호}" -> 해당 팝업에 대한 상세 정보와 삭제하기 버튼 같이 출력
     // 이때 삭제하기 버튼을 누르면 해당 요청 시행
-    @DeleteMapping("/popup/{seq}")
+    @DeleteMapping("/popup/{id}")
     @Operation(summary = "개별 팝업 삭제")
-    public ResponseEntity<String> deletePopup(@PathVariable long seq) {
-        boolean flag = popupStoreService.delete(seq);
+    public ResponseEntity<String> deletePopup(@PathVariable long id) {
+        popupStoreService.delete(id);
 
-        if (flag) {
-            return ResponseEntity.ok("팝업이 성공적으로 삭제되었습니다.");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("삭제할 팝업을 찾을 수 없습니다.");
-        }
+        return ResponseEntity.ok("팝업이 성공적으로 삭제되었습니다.");
     }
 }

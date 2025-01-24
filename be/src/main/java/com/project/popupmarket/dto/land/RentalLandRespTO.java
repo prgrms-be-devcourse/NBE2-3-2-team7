@@ -10,5 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 public class RentalLandRespTO {
     private RentalLandTO rentalLand;
-    private List<RentalLandImageTO> images;
+    private String thumbnail;
+    private List<String> images;
 }
