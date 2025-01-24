@@ -9,5 +9,5 @@ public final class AuthConstants {
     public static final String JWT_TOKEN_COOKIE_NAME = "jwt_token";
     public static final Duration JWT_TOKEN_DURATION = Duration.ofDays(14);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
-    public static final String REDIRECT_PATH = "/main";
+
 }

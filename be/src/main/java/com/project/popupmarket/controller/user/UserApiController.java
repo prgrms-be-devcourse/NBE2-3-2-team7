@@ -2,9 +2,7 @@ package com.project.popupmarket.controller.user;
 
 import com.project.popupmarket.dto.token.CreateAccessTokenResponse;
 import com.project.popupmarket.dto.user.UserRegisterDto;
-import com.project.popupmarket.entity.JwtToken;
 import com.project.popupmarket.entity.User;
-import com.project.popupmarket.repository.JwtTokenRepository;
 import com.project.popupmarket.service.token.TokenService;
 import com.project.popupmarket.service.user.UserService;
 import com.project.popupmarket.util.CookieUtil;
@@ -28,7 +26,6 @@ public class UserApiController {
 
     private final UserService userService;
     private final TokenService tokenService;
-    private final JwtTokenRepository jwtTokenRepository;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody UserRegisterDto request, HttpServletResponse response) {
@@ -42,12 +39,6 @@ public class UserApiController {
         String refreshToken = tokenService.createRefreshToken(user);
         String accessToken = tokenService.createAccessToken(user);
 
-        // 리프레시 토큰 저장
-        jwtTokenRepository.save(JwtToken
-                                        .builder()
-                                        .userId(userId)
-                                        .jwtToken(refreshToken)
-                                        .build());
 
         // 쿠키에 리프레시 토큰 저장
         CookieUtil.addCookie(response, JWT_TOKEN_COOKIE_NAME, refreshToken, (int) Duration
