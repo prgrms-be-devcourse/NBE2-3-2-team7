@@ -87,7 +87,7 @@ public class RentalPlaceController {
             return ResponseEntity.status(404).build();
         }
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(to);
     }
 
     @Operation(summary = "임대지 추가")

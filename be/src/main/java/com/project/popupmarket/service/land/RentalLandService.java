@@ -38,7 +38,7 @@ public class RentalLandService {
                     RentalLandTO rentalLandTO = modelMapper.map(rp, RentalLandTO.class);
 
                     // 썸네일 URL 생성
-                    String thumbnailFilePath = String.format("/land/%d_thumbnail.png", rp.getId());
+                    String thumbnailFilePath = String.format("land/%d_thumbnail.png", rp.getId());
                     String thumbnailUrl = s3FileService.getCloudFrontImageUrl(thumbnailFilePath);
 
                     // RentalLandRespTO 생성 및 데이터 설정
@@ -63,7 +63,7 @@ public class RentalLandService {
                     RentalLandTO rentalLandTO = new ModelMapper().map(rentalLand, RentalLandTO.class);
 
                     String filePath = String.format("land/%d_images_", rentalLand.getId());
-                    String thumbnailFilePath = String.format("/land/%d_thumbnail.png", rentalLandTO.getId());
+                    String thumbnailFilePath = String.format("land/%d_thumbnail.png", rentalLandTO.getId());
                     String thumbnailUrl = s3FileService.getCloudFrontImageUrl(thumbnailFilePath);
 
                     List<String> imageUrls = s3FileService.getCloudFrontImageListUrl(filePath);
@@ -90,7 +90,6 @@ public class RentalLandService {
                     RentalLandTO rentalLandTO = modelMapper.map(rp, RentalLandTO.class);
 
                     String thumbnailFilePath = String.format("land/%d_thumbnail.png", rp.getId());
-
                     String thumbnailUrl = s3FileService.getCloudFrontImageUrl(thumbnailFilePath);
 
                     RentalLandRespTO respTO = new RentalLandRespTO();
@@ -111,16 +110,12 @@ public class RentalLandService {
                 .map(rp -> {
                     RentalLandTO rentalLandTO = modelMapper.map(rp, RentalLandTO.class);
 
-                    String filePath = String.format("land/%d_images_", rentalLandTO.getId());
-                    String thumbnailFilePath = String.format("/land/%d_thumbnail.png", rentalLandTO.getId());
+                    String thumbnailFilePath = String.format("land/%d_thumbnail.png", rentalLandTO.getId());
                     String thumbnailUrl = s3FileService.getCloudFrontImageUrl(thumbnailFilePath);
-
-//                    List<String> imageUrls = s3FileService.getCloudFrontImageListUrl(filePath);
 
                     RentalLandRespTO respTO = new RentalLandRespTO();
                     respTO.setRentalLand(rentalLandTO);
                     respTO.setThumbnail(thumbnailUrl);
-//                    respTO.setImages(imageUrls);
 
                     return respTO;
                 })

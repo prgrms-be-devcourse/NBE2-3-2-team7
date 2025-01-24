@@ -164,7 +164,7 @@ public class S3FileService {
         return keysToDelete;
     }
 
-    private final String cloudFrontDomain = "https://d3kh2vqqajwnym.cloudfront.net";
+    private final String cloudFrontDomain = "https://d3kh2vqqajwnym.cloudfront.net/";
     public String getCloudFrontImageUrl(String filePath) {
 //        "/land/0_0_thumbnail_test.png"
         return cloudFrontDomain + filePath;
