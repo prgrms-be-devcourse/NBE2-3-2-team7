@@ -32,7 +32,7 @@ public class TokenService {
     }
 
     public String createNewAccessToken(String refreshToken) {
-        String savedToken = findRefreshToken(tokenProvider.getUserId(refreshToken));
+        String savedToken = findRefreshToken(getUserIdFromToken(refreshToken));
         if (!savedToken.equals(refreshToken)) {
             throw new IllegalArgumentException("Invalid token");
         }

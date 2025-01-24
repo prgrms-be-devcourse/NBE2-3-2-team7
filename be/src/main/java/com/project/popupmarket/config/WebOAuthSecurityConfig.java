@@ -5,7 +5,6 @@ import com.project.popupmarket.config.jwt.TokenProvider;
 import com.project.popupmarket.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.project.popupmarket.service.oauth.OAuth2UserCustomService;
 import com.project.popupmarket.service.user.UserDetailService;
-import com.project.popupmarket.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,7 +31,6 @@ public class WebOAuthSecurityConfig {
     private final OAuth2UserCustomService oAuth2UserCustomService;
     private final TokenProvider tokenProvider;
     private final UserDetailService userDetailService;
-    private final UserService userService;
 
     // WebSecurityCustomizer 빈 등록
     @Bean
