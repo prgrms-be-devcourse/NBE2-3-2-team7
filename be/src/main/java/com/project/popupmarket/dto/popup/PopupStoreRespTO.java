@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PopupStoreRespTO_test {
+public class PopupStoreRespTO {
     private PopupStoreTO popupStoreTO;
     private String thumbnail;
     private List<String> images;

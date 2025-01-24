@@ -1,6 +1,7 @@
 package com.project.popupmarket.controller.popup;
 
 import com.project.popupmarket.dto.popup.PopupStoreImgDTO;
+import com.project.popupmarket.dto.popup.PopupStoreRespTO;
 import com.project.popupmarket.dto.popup.PopupStoreTO;
 import com.project.popupmarket.repository.PopupStoreJpaRepository;
 import com.project.popupmarket.service.popup.PopupStoreFileStorageService;
@@ -98,7 +99,7 @@ public class PopupStoreController {
     // : 조건에 해당하는 팝업들 미리보기 - targetLocation, type, targetAgeGroup, startDate ~ endDate
     @GetMapping("/popup/list")
     @Operation(summary = "조건에 해당하는 팝업 리스트")
-    public Page<PopupStoreTO> getPopupByFilter(
+    public Page<PopupStoreRespTO> getPopupByFilter(
             @RequestParam(required = false) String targetLocation,
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String targetAgeGroup,
@@ -116,21 +117,20 @@ public class PopupStoreController {
     // 특정 번호에 해당하는 팝업스토어 상세 정보
     @GetMapping("/popup/{seq}")
     @Operation(summary = "개별 팝업 조회" )
-    public PopupStoreImgDTO getPopupBySeq(@PathVariable Long seq) {
-        PopupStoreTO to = popupStoreService.findBySeq(seq);
-//        List<String> imgLst = popupStoreImageJpaRepository.findById_PopupStoreSeq(seq);
+    public PopupStoreRespTO  getPopupBySeq(@PathVariable Long seq) {
+        PopupStoreRespTO to = popupStoreService.findBySeq(seq);
 
         if (to == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "PopupStore not found with seq: " + seq);
         }
-        return null;
+        return to;
     }
 
     // [ Read ] - 3 : 관리 중인 팝업스토어 목록
     // thumbnail, seq(팝업 기획자의 팝업 데이터), type, title, 입점 요청 몇 회 받았는지
     @GetMapping("/popup/user")
     @Operation(summary = "사용자 팝업 리스트")
-    public List<PopupStoreTO> getPopupByUser() {
+    public List<PopupStoreRespTO> getPopupByUser() {
         Long userSeq = userContextUtil.getUserId();
         return popupStoreService.findByUserSeq(userSeq);
     }
